@@ -1,0 +1,32 @@
+# FastAPI and Web Server
+fastapi>=0.104.1
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# Pydantic for data validation
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# OpenAI for AI agents
+openai>=1.3.7
+
+# PDF Processing - usa wheel pré-compilado
+pymupdf>=1.23.8
+
+# Image Processing
+Pillow>=10.1.0
+
+# Utilities
+python-dotenv>=1.0.0
+
+# Optional: OCR (requer tesseract instalado no sistema)
+# pytesseract>=0.3.10
+# opencv-python-headless>=4.8.1.78
+
+# Optional: LangChain for advanced orchestration
+# langchain>=0.0.340
+# langchain-openai>=0.0.2
+
+# Optional: LlamaIndex alternative
+# llama-index>=0.9.18
+
