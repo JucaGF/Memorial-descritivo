@@ -1,0 +1,19 @@
+OBJETIVO
+- Redija a abertura da seção "4. SERVIÇOS CONTEMPLADOS", citando que o sistema contempla Voz (4.1), Dados (4.2), Vídeo (4.3), Intercomunicação (4.4) e Monitoramento (4.5).
+
+CONTEXTO
+- Use {contexto_factual.servicos_presentes} apenas para confirmar a presença dos serviços.
+
+ESTILO
+- 1 parágrafo curto, estilo dos modelos.
+- Apresente os serviços que serão detalhados nas subseções seguintes.
+
+SAÍDA
+- NÃO incluir o título da seção.
+- Apenas o parágrafo introdutório da seção 4.
+
+
+
+
+
+

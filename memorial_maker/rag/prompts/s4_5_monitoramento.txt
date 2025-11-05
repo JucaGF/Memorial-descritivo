@@ -1,0 +1,21 @@
+OBJETIVO
+- Redija "4.5. SERVIÇO DE MONITORAMENTO" (CFTV IP: câmeras bullet/dome, tráfego CAT-6).
+
+CONTEXTO
+- Use {contexto_factual.cam_bullet}, {contexto_factual.cam_dome}, {contexto_factual.cat6}, trajetos até switches/servidor quando constarem.
+
+ESTILO
+- 1–2 parágrafos, tom dos modelos.
+- Descreva o sistema de CFTV com câmeras IP (bullet para externas, dome para internas quando aplicável).
+- Mencione que o tráfego se dá via rede estruturada CAT-6 até a sala de monitoramento.
+- Cite armazenamento e visualização quando pertinente.
+
+SAÍDA
+- NÃO incluir o título da subseção.
+- Corpo da subseção 4.5.
+
+
+
+
+
+

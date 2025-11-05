@@ -1,0 +1,20 @@
+OBJETIVO
+- Redija "6. ELEMENTOS PASSIVOS E ATIVOS DA REDE".
+
+CONTEXTO
+- Use categorias detectadas em {contexto_factual.materiais} (CAT-6, patch panels, patch cords, tomadas RJ-45, caixas 4x2/4x4/metálica 50x50x20, quadro VDI, D.G.). Se não houver marca/modelo, mantenha genérico.
+
+ESTILO
+- Lista padronizada no estilo dos modelos.
+- Descreva os componentes passivos (cabos, patch panels, tomadas, caixas, racks) e ativos (switches, roteadores) quando mencionados.
+- Use categorias genéricas (CAT-6 U/UTP, patch cords, patch panels, etc.) sem marcas se não estiverem no contexto.
+
+SAÍDA
+- NÃO incluir o título da seção.
+- Lista ou texto estruturado descrevendo os elementos.
+
+
+
+
+
+

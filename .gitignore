@@ -20,53 +20,52 @@ wheels/
 .installed.cfg
 *.egg
 
-# Virtual Environment
+# Virtual environments
 venv/
-ENV/
 env/
+ENV/
 .venv
 
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# IDE
+# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-.DS_Store
 
-# Temporary files
-temp_uploads/
+# Environment
+.env
+.env.local
+
+# Outputs
+out/
+runtime/
+*.docx
 *.pdf
-*.tmp
+!memorial/*.doc
+!memorial/*.docx
+!projetos_plantas/*.pdf
 
 # Logs
 *.log
 logs/
 
+# OS
+.DS_Store
+Thumbs.db
+
 # Testing
 .pytest_cache/
 .coverage
 htmlcov/
-.tox/
 
-# MyPy
-.mypy_cache/
-.dmypy.json
-dmypy.json
+# Temporary
+tmp/
+temp/
+*.tmp
 
-# Jupyter Notebook
-.ipynb_checkpoints
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
 
-# OS
-Thumbs.db
+
+
 

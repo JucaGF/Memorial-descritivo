@@ -1,0 +1,21 @@
+OBJETIVO
+- Redija "7. TESTES E ACEITAÇÃO".
+
+CONTEXTO
+- Cite certificação de cabeamento conforme ANSI/TIA aplicável, testes de continuidade/atenuação, inspeção visual e documentação final, SEM inventar valores de medição.
+
+ESTILO
+- 1 parágrafo (eventualmente 2), tom padronizado dos modelos.
+- Descreva os procedimentos de teste e certificação do cabeamento estruturado CAT-6.
+- Mencione equipamento adequado (certificador de rede), testes de conformidade com normas ANSI/TIA-568-C.
+- Cite documentação as-built e relatórios de certificação.
+
+SAÍDA
+- NÃO incluir o título da seção.
+- Corpo da seção 7.
+
+
+
+
+
+

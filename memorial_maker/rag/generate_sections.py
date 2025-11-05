@@ -1,0 +1,372 @@
+"""Geração de seções do memorial usando LLM (paralelo)."""
+
+import asyncio
+import json
+from pathlib import Path
+from typing import Dict, List, Any, Optional
+
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage, SystemMessage
+
+from memorial_maker.config import settings
+from memorial_maker.rag.index_style import StyleIndexer
+from memorial_maker.utils.logging import get_logger
+
+logger = get_logger("rag.generate")
+
+
+class SectionGenerator:
+    """Gerador de seções do memorial."""
+
+    def __init__(self, style_indexer: StyleIndexer, prompts_dir: Path):
+        """Inicializa gerador.
+        
+        Args:
+            style_indexer: Indexador de estilo
+            prompts_dir: Diretório com prompts
+        """
+        self.style_indexer = style_indexer
+        self.prompts_dir = prompts_dir
+        
+        # Configura LLM (GPT-5 não suporta top_p)
+        llm_params = {
+            "model": settings.llm_model,
+            "temperature": settings.llm_temperature,
+            "max_tokens": settings.llm_max_tokens,
+            "openai_api_key": settings.openai_api_key,
+        }
+        
+        # Adiciona top_p apenas para modelos que suportam (não GPT-5)
+        if not settings.llm_model.startswith("gpt-5"):
+            llm_params["top_p"] = settings.llm_top_p
+        
+        self.llm = ChatOpenAI(**llm_params)
+        
+        # Carrega instruções base
+        self.base_instructions = self._load_prompt("base_instructions.txt")
+    
+    def _load_prompt(self, filename: str) -> str:
+        """Carrega arquivo de prompt."""
+        path = self.prompts_dir / filename
+        if not path.exists():
+            logger.warning(f"Prompt não encontrado: {filename}")
+            return ""
+        
+        with open(path, "r", encoding="utf-8") as f:
+            return f.read()
+
+    def _filter_context_for_section(
+        self,
+        section: str,
+        master_data: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """Filtra dados relevantes para uma seção."""
+        
+        obra = master_data.get("obra", {})
+        servicos = master_data.get("servicos", [])
+        pavimentos = master_data.get("pavimentos", [])
+        itens = master_data.get("itens", [])
+        salas = master_data.get("salas_tecnicas", [])
+        
+        # Contexto base
+        base_ctx = {
+            "empreendimento": obra.get("empreendimento", ""),
+            "construtora": obra.get("construtora", ""),
+        }
+        
+        # Filtros específicos por seção
+        if section == "s1_introducao":
+            return {
+                **base_ctx,
+                "servicos_presentes": servicos,
+                "tipologia_obra": ", ".join(pavimentos[:3]) if pavimentos else "",
+            }
+        
+        elif section == "s2_dados_obra":
+            return {
+                "obra": obra,
+                "carimbo": obra.get("carimbo", {}),
+                "pavimentos": pavimentos,
+            }
+        
+        elif section == "s3_normas":
+            from memorial_maker.config import NORMAS_PADRAO
+            return {
+                "normas_padrao": NORMAS_PADRAO,
+                "normas_detectadas": [],  # TODO: extrair de textos se mencionadas
+            }
+        
+        elif section == "s4_servicos":
+            return {
+                "servicos_presentes": servicos,
+            }
+        
+        elif section == "s4_1_voz":
+            pontos_tel = [i for i in itens if i.get("tipo") == "point_telefone"]
+            pontos_int = [i for i in itens if i.get("tipo") == "point_interfone"]
+            return {
+                **base_ctx,
+                "pontos_telefone": pontos_tel,
+                "pontos_interfone": pontos_int,
+            }
+        
+        elif section == "s4_2_dados":
+            pontos_rj45 = [i for i in itens if i.get("tipo") == "point_rj45"]
+            wifi_in = [i for i in itens if i.get("tipo") == "wifi_indoor"]
+            wifi_out = [i for i in itens if i.get("tipo") == "wifi_outdoor"]
+            cat6 = [i for i in itens if "cat6" in i.get("cabos", [])]
+            return {
+                **base_ctx,
+                "point_rj45": pontos_rj45,
+                "wifi_indoor": wifi_in,
+                "wifi_outdoor": wifi_out,
+                "cat6": len(cat6) > 0,
+            }
+        
+        elif section == "s4_3_video":
+            tv_col = [i for i in itens if i.get("tipo") == "point_tv_coletiva"]
+            tv_ass = [i for i in itens if i.get("tipo") == "point_tv_assinatura"]
+            divisores = {}
+            for i in itens:
+                div = i.get("divisor")
+                pav = i.get("pavimento")
+                if div and pav:
+                    if pav not in divisores:
+                        divisores[pav] = []
+                    divisores[pav].append(div)
+            
+            return {
+                **base_ctx,
+                "point_tv_coletiva": tv_col,
+                "point_tv_assinatura": tv_ass,
+                "divisores": divisores,
+                "rg6_u90": True,  # Assumir se tem TV
+                "mb10": True,
+                "cci2": True,
+            }
+        
+        elif section == "s4_4_intercom":
+            pontos_int = [i for i in itens if i.get("tipo") == "point_interfone"]
+            return {
+                **base_ctx,
+                "point_interfone": pontos_int,
+                "porteiro": len(pontos_int) > 0,
+                "botoeira": len(pontos_int) > 0,
+                "cci2": True,
+            }
+        
+        elif section == "s4_5_monitoramento":
+            cam_bullet = [i for i in itens if i.get("tipo") == "cam_bullet"]
+            cam_dome = [i for i in itens if i.get("tipo") == "cam_dome"]
+            return {
+                **base_ctx,
+                "cam_bullet": cam_bullet,
+                "cam_dome": cam_dome,
+                "cat6": True,
+            }
+        
+        elif section == "s5_sala_monitoramento":
+            return {
+                **base_ctx,
+                "sala_monitoramento": salas[0] if salas else {},
+            }
+        
+        elif section == "s6_passivos_ativos":
+            # Coleta materiais únicos
+            materiais = set()
+            for item in itens:
+                cabos = item.get("cabos", [])
+                materiais.update(cabos)
+                tipo = item.get("tipo", "")
+                if "rj45" in tipo:
+                    materiais.add("tomada_rj45")
+                if "tv" in tipo:
+                    materiais.add("tomada_tv")
+            
+            return {
+                "materiais": list(materiais),
+            }
+        
+        elif section == "s7_testes_aceitacao":
+            # Contexto mínimo
+            return {
+                "cat6_presente": any("cat6" in i.get("cabos", []) for i in itens),
+            }
+        
+        return {}
+
+    async def _generate_section_async(
+        self,
+        section_id: str,
+        master_data: Dict[str, Any],
+    ) -> Dict[str, str]:
+        """Gera uma seção de forma assíncrona."""
+        logger.info(f"Gerando seção: {section_id}")
+        
+        try:
+            # Carrega prompt específico
+            section_prompt = self._load_prompt(f"{section_id}.txt")
+            if not section_prompt:
+                logger.error(f"Prompt não encontrado para {section_id}")
+                return {"section_id": section_id, "content": "", "error": "Prompt não encontrado"}
+            
+            # Filtra contexto
+            context_factual = self._filter_context_for_section(section_id, master_data)
+            
+            # Recupera exemplos de estilo
+            section_name = section_id.replace("s", "").replace("_", "")
+            if section_name.startswith("4"):
+                # Subseções de serviços
+                section_name = section_id.split("_")[-1]  # voz, dados, etc.
+            
+            style_examples = self.style_indexer.retrieve_style_examples(section_name, top_k=3)
+            style_text = "\n\n---\n\n".join(style_examples) if style_examples else ""
+            
+            # Monta prompt final
+            system_msg = SystemMessage(content=self.base_instructions)
+            
+            human_prompt = f"""
+{section_prompt}
+
+## EXEMPLOS DE ESTILO (apenas para referência de tom/estrutura):
+{style_text if style_text else "(Sem exemplos disponíveis)"}
+
+## CONTEXTO FACTUAL (use APENAS estes dados):
+```json
+{json.dumps(context_factual, ensure_ascii=False, indent=2)}
+```
+
+Gere agora o texto da seção em PT-BR técnico, seguindo as regras.
+"""
+            
+            human_msg = HumanMessage(content=human_prompt)
+            
+            # Chama LLM
+            response = await self.llm.ainvoke([system_msg, human_msg])
+            content = response.content.strip()
+            
+            logger.info(f"Seção {section_id} gerada: {len(content)} chars")
+            return {"section_id": section_id, "content": content}
+            
+        except Exception as e:
+            logger.error(f"Erro ao gerar seção {section_id}: {e}")
+            return {"section_id": section_id, "content": "", "error": str(e)}
+
+    async def generate_all_sections_async(
+        self,
+        master_data: Dict[str, Any],
+    ) -> Dict[str, str]:
+        """Gera todas as seções em paralelo.
+        
+        Args:
+            master_data: JSON mestre consolidado
+            
+        Returns:
+            Dicionário {section_id: content}
+        """
+        logger.info("Gerando todas as seções em paralelo...")
+        
+        sections_ids = [
+            "s1_introducao",
+            "s2_dados_obra",
+            "s3_normas",
+            "s4_servicos",
+            "s4_1_voz",
+            "s4_2_dados",
+            "s4_3_video",
+            "s4_4_intercom",
+            "s4_5_monitoramento",
+            "s5_sala_monitoramento",
+            "s6_passivos_ativos",
+            "s7_testes_aceitacao",
+        ]
+        
+        try:
+            # Executa em paralelo
+            tasks = [
+                self._generate_section_async(sid, master_data)
+                for sid in sections_ids
+            ]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+            
+            # Organiza resultados
+            sections = {}
+            for result in results:
+                if isinstance(result, Exception):
+                    logger.error(f"Exceção durante geração: {result}")
+                    continue
+                
+                section_id = result.get("section_id")
+                content = result.get("content", "")
+                if content:
+                    sections[section_id] = content
+            
+            logger.info(f"Geradas {len(sections)} seções com sucesso")
+            return sections
+            
+        except Exception as e:
+            logger.error(f"Erro na geração paralela: {e}")
+            # Fallback: tenta sequencial
+            logger.info("Tentando geração sequencial...")
+            return await self._generate_sequential(sections_ids, master_data)
+
+    async def _generate_sequential(
+        self,
+        sections_ids: List[str],
+        master_data: Dict[str, Any],
+    ) -> Dict[str, str]:
+        """Fallback: gera seções sequencialmente."""
+        sections = {}
+        
+        for section_id in sections_ids:
+            result = await self._generate_section_async(section_id, master_data)
+            content = result.get("content", "")
+            if content:
+                sections[section_id] = content
+        
+        return sections
+
+    def generate_all_sections(
+        self,
+        master_data: Dict[str, Any],
+        parallel: bool = True,
+    ) -> Dict[str, str]:
+        """Versão síncrona (wrapper).
+        
+        Args:
+            master_data: JSON mestre
+            parallel: Se True, tenta paralelo; senão, sequencial
+            
+        Returns:
+            Dicionário {section_id: content}
+        """
+        if parallel and settings.parallel_execution:
+            # Tenta paralelo
+            try:
+                return asyncio.run(self.generate_all_sections_async(master_data))
+            except Exception as e:
+                logger.warning(f"Falha no paralelo, tentando sequencial: {e}")
+                # Força sequencial
+                settings.parallel_execution = False
+        
+        # Sequencial
+        sections_ids = [
+            "s1_introducao",
+            "s2_dados_obra",
+            "s3_normas",
+            "s4_servicos",
+            "s4_1_voz",
+            "s4_2_dados",
+            "s4_3_video",
+            "s4_4_intercom",
+            "s4_5_monitoramento",
+            "s5_sala_monitoramento",
+            "s6_passivos_ativos",
+            "s7_testes_aceitacao",
+        ]
+        
+        return asyncio.run(self._generate_sequential(sections_ids, master_data))
+
+
+
+

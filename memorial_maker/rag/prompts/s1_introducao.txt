@@ -1,0 +1,20 @@
+OBJETIVO
+- Redija a seção "1. INTRODUÇÃO" contextualizando o escopo do sistema de telecomunicações do empreendimento.
+
+CONTEXTO
+- Use {contexto_factual.servicos_presentes} (voz, dados, vídeo, intercomunicação, monitoramento) e {contexto_factual.tipologia_obra}.
+
+ESTILO
+- 1–2 parágrafos, tom técnico, seguindo a cadência dos memoriais-modelo.
+- Apresente uma visão geral do sistema de infraestrutura de telecomunicações a ser implantado.
+- Mencione os serviços contemplados de forma sucinta, preparando o leitor para os detalhes que virão.
+
+SAÍDA
+- NÃO incluir o título da seção no texto (será adicionado automaticamente).
+- Apenas o corpo da seção em prosa corrida.
+
+
+
+
+
+

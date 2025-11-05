@@ -1,166 +1,243 @@
-# 🚀 Quick Start - Memorial Automator
+# Memorial Maker - Início Rápido ⚡
 
-Comece a usar o sistema em 5 minutos!
+## Instalação em 3 Passos
 
-## ⚡ Instalação Rápida
-
-```bash
-# 1. Clone/navegue até o diretório
-cd /home/joaquim/Projects/Memorial-descritivo
-
-# 2. Crie ambiente virtual
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-
-# 3. Instale dependências
-pip install -r requirements.txt
-
-# 4. Configure sua chave OpenAI
-echo 'OPENAI_API_KEY=sua_chave_aqui' > .env
-
-# 5. Inicie o servidor
-./start.sh
-```
-
-## 🎯 Primeiro Uso
-
-### Via Interface Web (Swagger UI)
-
-1. Abra seu navegador: **http://localhost:8000/docs**
-2. Clique em **POST /api/v1/generate_memorial**
-3. Clique em **Try it out**
-4. Faça upload de um PDF de projeto
-5. Clique em **Execute**
-6. Veja o memorial gerado! 🎉
-
-### Via Python
-
-```python
-import requests
-
-# Upload e processar PDF
-url = "http://localhost:8000/api/v1/generate_memorial"
-files = {"file": open("seu_projeto.pdf", "rb")}
-response = requests.post(url, files=files)
-
-# Exibir resultado
-result = response.json()
-print(result["memorial_text"])
-```
-
-### Via cURL
+### 1. Execute o setup
 
 ```bash
-curl -X POST "http://localhost:8000/api/v1/generate_memorial" \
-  -F "file=@seu_projeto.pdf" \
-  > memorial.json
+./setup.sh
 ```
 
-## 📝 Customização Básica
-
-### 1. Adicione Regras ABNT
-
-Edite `context_files/abnt_rules.txt`:
+### 2. Configure sua API key
 
 ```bash
-nano context_files/abnt_rules.txt
+cp env.example .env
+nano .env
 ```
 
-Adicione suas regras específicas da ABNT.
+Adicione:
+```bash
+OPENAI_API_KEY=sk-proj-sua-chave-aqui
+```
 
-### 2. Customize o Template
-
-Edite `context_files/client_template.txt`:
+### 3. Ative o ambiente
 
 ```bash
-nano context_files/client_template.txt
+source venv/bin/activate
 ```
 
-Defina a estrutura desejada para o memorial.
+## Uso Imediato
 
-## 🔧 Configurações Importantes
-
-### Arquivo `.env`
-
-```env
-# Sua chave OpenAI (OBRIGATÓRIO)
-OPENAI_API_KEY=sk-...
-
-# Modelos de IA
-OPENAI_MODEL=gpt-4o              # Parser (multimodal)
-OPENAI_WRITER_MODEL=gpt-4-turbo  # Redator
-OPENAI_REVIEWER_MODEL=gpt-4-turbo # Revisor
-
-# Temperaturas (0.0 = preciso, 1.0 = criativo)
-WRITER_TEMPERATURE=0.7
-PARSER_TEMPERATURE=0.3
-REVIEWER_TEMPERATURE=0.2
-```
-
-## 📊 Testando
-
-### Teste básico
+### Opção A: Interface Web (Recomendado) 🖥️
 
 ```bash
-# Verifica se API está online
-curl http://localhost:8000/health
+streamlit run ui/app.py
 ```
 
-### Teste completo
+1. Configure API Key na sidebar
+2. Faça upload de:
+   - PDFs de projeto (plantas, cortes)
+   - Memoriais-modelo (DOC/DOCX) - opcional
+   - Logo TecPred (PNG) - opcional
+3. Clique em "Gerar Memorial Descritivo"
+4. Aguarde ~3-5 minutos
+5. Baixe o DOCX gerado
+
+### Opção B: Linha de Comando 💻
 
 ```bash
-# Com o script de teste
-python test_api.py seu_projeto.pdf
+memorial-make \
+  --pdf-dir "./projetos_plantas" \
+  --modelos-dir "./memorial" \
+  --out-dir "./out"
 ```
 
-## 💡 Dicas Rápidas
-
-### 1. Melhorando a Qualidade
-
-- ✅ **Preencha bem** os arquivos de contexto (ABNT rules e template)
-- ✅ **Use PDFs de boa qualidade** (texto extraível, não escaneado)
-- ✅ **Adicione instruções customizadas** quando necessário
-
-### 2. Performance
-
-- 📊 PDFs de 10-20 páginas: ~40-60 segundos
-- 📊 PDFs de 50+ páginas: 2-5 minutos
-- 📊 PDFs de 100+ páginas: 5-10 minutos
-
-### 3. Troubleshooting
-
-**Erro: "OpenAI API key not found"**
+**Com logo:**
 ```bash
-# Verifique se o .env existe e tem a chave
+memorial-make \
+  --pdf-dir "./projetos_plantas" \
+  --modelos-dir "./memorial" \
+  --logo "./tecpred_logo.png" \
+  --out-dir "./out"
+```
+
+## Estrutura de Entrada
+
+Organize seus arquivos:
+
+```
+projetos_plantas/
+  ├── PROJETO_01_SUBSOLO.pdf
+  ├── PROJETO_02_TÉRREO.pdf
+  ├── PROJETO_03_TIPO.pdf
+  └── PROJETO_04_COBERTURA.pdf
+
+memorial/
+  ├── MEMORIAL_MODELO_01.docx
+  └── MEMORIAL_MODELO_02.docx
+
+tecpred_logo.png
+```
+
+## O Que Vai Acontecer
+
+1. ⏳ **Extração** (2 min)
+   - Lê PDFs com Docling
+   - OCR em áreas específicas
+   - Detecta plantas, cortes, legendas
+
+2. 🔧 **Normalização** (10 seg)
+   - Identifica pontos (RJ-45, TV, câmeras, etc.)
+   - Mapeia cabos (CAT-6, RG-06, etc.)
+   - Extrai medidas e divisores
+
+3. 📊 **Consolidação** (10 seg)
+   - Agrupa por pavimento
+   - Agrupa por serviço
+   - Gera JSONs e CSVs
+
+4. ✍️ **Geração** (30-60 seg)
+   - 7 seções em paralelo
+   - Estilo dos modelos + dados reais
+   - LLM escreve memorial
+
+5. 📝 **DOCX Final**
+   - Capa com logo
+   - 7 seções formatadas
+   - Pronto para revisão!
+
+## Resultado
+
+```
+out/
+├── extraido/
+│   ├── mestre.json                    ← Dados consolidados
+│   ├── itens_por_pavimento.csv        ← Itens por andar
+│   └── totais_por_servico.csv         ← Totais agregados
+├── memorial/
+│   └── MEMORIAL_PROJETO_2025-11-04.docx  ← SEU MEMORIAL! 🎉
+└── logs/
+    └── execution.log                   ← Logs detalhados
+```
+
+## Solução de Problemas Rápidos
+
+### ❌ "OpenAI API key not found"
+
+```bash
+# Verifique se configurou:
 cat .env | grep OPENAI_API_KEY
+
+# Se vazio, edite:
+nano .env
+# Adicione: OPENAI_API_KEY=sk-proj-...
 ```
 
-**Erro: "Connection refused"**
+### ❌ "Tesseract not found"
+
+**Ubuntu/Debian:**
 ```bash
-# Certifique-se de que o servidor está rodando
-./start.sh
+sudo apt install tesseract-ocr tesseract-ocr-por
 ```
 
-**Erro: "Only PDF files are supported"**
+**Fedora:**
 ```bash
-# Verifique a extensão do arquivo
-file seu_arquivo.pdf
+sudo dnf install tesseract tesseract-langpack-por
 ```
 
-## 🎓 Próximos Passos
+### ❌ "No module named 'memorial_maker'"
 
-1. ✅ Leia o [README.md](README.md) completo
-2. 📖 Consulte [SETUP.md](SETUP.md) para configuração detalhada
-3. 💻 Veja [EXAMPLES.md](EXAMPLES.md) para mais exemplos de código
-4. 🏗️ Entenda a [ARCHITECTURE.md](ARCHITECTURE.md) do sistema
+```bash
+# Reinstale:
+pip install -e .
+```
 
-## 🆘 Precisa de Ajuda?
+### ❌ "Rate limit exceeded"
 
-- 📚 Documentação interativa: http://localhost:8000/docs
-- 📖 ReDoc: http://localhost:8000/redoc
-- 🐛 Verifique os logs do servidor
+Use modo sequencial:
+```bash
+memorial-make --sequential ...
+```
+
+Ou reduza modelo:
+```bash
+memorial-make --llm-model "gpt-4o-mini" ...
+```
+
+## Dicas Rápidas
+
+💡 **Primeira vez?** Use a UI (Streamlit) - é mais visual
+
+💡 **Precisa de velocidade?** Mantenha `--parallel` (padrão)
+
+💡 **Quer economizar?** Use `--llm-model gpt-4o-mini`
+
+💡 **PDFs ruins?** Aumente `--dpi 400` ou `--dpi 600`
+
+💡 **Sem modelos?** Funciona sem! O estilo será genérico
+
+💡 **Debug?** Use `--verbose` para logs detalhados
+
+## Comandos Úteis
+
+```bash
+# Ajuda completa
+memorial-make --help
+
+# Versão
+memorial-make version
+
+# Exemplo completo
+memorial-make \
+  --pdf-dir "./projetos_plantas" \
+  --modelos-dir "./memorial" \
+  --logo "./logo.png" \
+  --out-dir "./output" \
+  --dpi 300 \
+  --llm-model "gpt-4o" \
+  --parallel \
+  --verbose
+
+# Testes
+pytest tests/ -v
+```
+
+## O Que Esperar no Memorial
+
+✅ **Capa** com logo e dados do projeto
+✅ **1. Introdução** - Visão geral
+✅ **2. Dados da Obra** - Identificação
+✅ **3. Normas Técnicas** - NBR, EIA/TIA, ISO
+✅ **4. Serviços Contemplados**
+   - 4.1. Voz
+   - 4.2. Dados (RJ-45, Wi-Fi)
+   - 4.3. Vídeo (TV, divisores)
+   - 4.4. Intercomunicação
+   - 4.5. Monitoramento (CFTV)
+✅ **5. Sala de Monitoramento** - Requisitos
+✅ **6. Elementos Passivos/Ativos** - Materiais
+✅ **7. Testes e Aceitação** - Certificação
+
+## Próximos Passos
+
+📖 **Documentação Completa:**
+- `README.md` - Visão geral
+- `INSTALL.md` - Instalação detalhada
+- `USAGE.md` - Guia de uso completo
+- `PROJECT_SUMMARY.md` - Arquitetura e componentes
+
+🐛 **Encontrou um bug?** Abra uma issue
+
+💡 **Tem uma sugestão?** Contribuições são bem-vindas!
 
 ---
 
-**Pronto!** Você já está gerando memoriais descritivos automaticamente! 🚀✨
+**Tempo médio: 3-5 minutos do upload ao DOCX pronto** ⚡
+
+Bom trabalho! 🎉
+
+
+
+
+
 

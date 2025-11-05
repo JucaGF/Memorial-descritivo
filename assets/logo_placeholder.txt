@@ -1,0 +1,6 @@
+IMPORTANTE: Adicione a logo TecPred aqui!
+
+Arquivo necessário: logo_tecpred.png
+
+Execute: ../add_logo.sh
+Ou leia: COMO_ADICIONAR_LOGO.md

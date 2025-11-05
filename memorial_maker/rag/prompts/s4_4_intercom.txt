@@ -1,0 +1,20 @@
+OBJETIVO
+- Redija "4.4. SERVIÇO DE INTERCOMUNICAÇÃO" (porteiro, botoeira, fecho).
+
+CONTEXTO
+- Use {contexto_factual.point_interfone}, {contexto_factual.porteiro}, {contexto_factual.botoeira}, {contexto_factual.cci2} e o trajeto até a mesa/recepção quando constar.
+
+ESTILO
+- 1 parágrafo, integração com a infraestrutura de dados conforme o estilo dos modelos.
+- Descreva o sistema de intercomunicação (interfones, porteiro eletrônico, fechaduras).
+- Mencione integração IP quando aplicável.
+
+SAÍDA
+- NÃO incluir o título da subseção.
+- Corpo da subseção 4.4.
+
+
+
+
+
+

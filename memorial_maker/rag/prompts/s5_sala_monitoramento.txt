@@ -1,0 +1,20 @@
+OBJETIVO
+- Redija "5. SALA DE MONITORAMENTO (ER/EF)" com requisitos arquitetônicos/ambientais/instalação.
+
+CONTEXTO
+- Use {contexto_factual.sala_monitoramento} e reforce requisitos padrões dos modelos (TGB/TMGB, iluminação adequada, climatização, organização de racks, firestops) SEM inventar números se ausentes.
+
+ESTILO
+- Lista organizada de requisitos + pequena introdução.
+- Descreva os requisitos de infraestrutura para a Sala de Telecomunicações (ER/EF).
+- Inclua: aterramento (TGB/TMGB), iluminação (mínimo 540 lux), climatização (18-27°C), firestops, alimentação elétrica independente, controle de acesso (RFID quando aplicável), distâncias máximas.
+
+SAÍDA
+- NÃO incluir o título da seção.
+- Parágrafo introdutório seguido de lista de requisitos.
+
+
+
+
+
+

@@ -1,0 +1,20 @@
+OBJETIVO
+- Redija "3. NORMAS TÉCNICAS".
+
+CONTEXTO
+- Liste as normas padrão dos modelos + quaisquer normas detectadas em {contexto_factual.normas_detectadas}.
+
+ESTILO
+- Um parágrafo introdutório e, em seguida, uma lista de normas. Ajuste a grafia para o padrão dos modelos.
+- As normas devem ser listadas com seus códigos e títulos completos.
+- Mantenha o formato: "NBR XXXXX - Título da norma"
+
+SAÍDA
+- NÃO incluir o título da seção.
+- Parágrafo introdutório seguido de lista de normas.
+
+
+
+
+
+

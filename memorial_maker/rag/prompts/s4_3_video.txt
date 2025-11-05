@@ -1,0 +1,21 @@
+OBJETIVO
+- Redija "4.3. SERVIÇO DE VÍDEO" (TV coletiva/assinatura), cabos RG-06/U#90% e divisores (1/2..1/5).
+
+CONTEXTO
+- Use {contexto_factual.rg6_u90}, {contexto_factual.divisores}, {contexto_factual.mb10}, {contexto_factual.cci2}, mapeando a distribuição por pavimento quando constar.
+
+ESTILO
+- 1–2 parágrafos, mantendo a terminologia dos modelos.
+- Descreva o sistema de TV coletiva/assinatura com ênfase no cabeamento coaxial RG-06/U#90%.
+- Mencione divisores ópticos ou de RF quando presentes no contexto.
+- Cite caixas de distribuição (MB-10, CCI-2) se constarem.
+
+SAÍDA
+- NÃO incluir o título da subseção.
+- Corpo da subseção 4.3.
+
+
+
+
+
+

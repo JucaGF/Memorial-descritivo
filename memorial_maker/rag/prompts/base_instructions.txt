@@ -1,0 +1,20 @@
+Você escreverá um Memorial Descritivo de Telecomunicações em PT-BR técnico.
+
+REGRAS GERAIS
+- Use APENAS o conteúdo de {contexto_factual} para fatos (quantidades, itens, pavimentos, cabos, alturas, diâmetros, divisores, salas técnicas).
+- OS MODELOS servem SOMENTE para estilo, ordem, títulos, linguagem e encadeamento (NUNCA use seus números como fatos).
+- Se um dado não existir no {contexto_factual}, OMITA sem mencionar que está ausente.
+- Mantenha a estrutura: Seções 1..7 e subitens 4.1..4.5 (títulos exatos).
+- Formatação: PT-BR, vírgula decimal (ex.: 1,40 m); diâmetros em mm (e polegadas apenas se constarem).
+- Tom: claro, objetivo, técnico, igual ao estilo dos memoriais-modelo.
+
+SAÍDA
+- Prosa corrida (sem listas desnecessárias), exceto quando o estilo dos modelos pedir listas.
+- Não invente marcas/modelos. Utilize categorias (CAT-6, RG-06/U#90%, etc.) se constarem no contexto.
+- Seja conciso mas completo. Mantenha o nível de detalhe adequado para um documento técnico profissional.
+
+
+
+
+
+

@@ -1,247 +1,344 @@
-# Memorial Automator
+# 📄 Memorial Maker
 
-Sistema de automação para criação de memoriais descritivos a partir de projetos de engenharia/arquitetura em PDF.
+**Geração automática de Memorial Descritivo de Telecomunicações com IA**
 
-## 🎯 Objetivo
+Ferramenta que extrai dados de plantas técnicas (PDFs) e gera memoriais descritivos profissionais usando **Unstructured.io** para extração e **GPT-5** para redação.
 
-Automatizar a geração de memoriais descritivos técnicos usando IA, garantindo conformidade com normas ABNT e templates de clientes.
+---
 
-## ✨ Interface Web
+## 🌟 Características
 
-O sistema agora conta com uma **interface web moderna e intuitiva**!
+- ✅ **Extração inteligente**: Usa [Unstructured.io](https://unstructured.io) para extrair texto e tabelas de PDFs
+- ✅ **GPT-5**: Redação técnica de alta qualidade
+- ✅ **RAG**: Indexa memoriais-modelo para manter estilo/estrutura
+- ✅ **Interface dupla**: CLI e Web (Streamlit)
+- ✅ **Normalização automática**: Padroniza nomenclatura de itens
+- ✅ **Exportação**: DOCX formatado + CSVs de dados
 
-**Acesse:** http://localhost:8000 (após iniciar o servidor)
+---
 
-**Características:**
-- 🎨 Design moderno com gradientes e animações
-- 📱 Totalmente responsivo (desktop, tablet, mobile)
-- 🚀 Drag & Drop para upload de PDFs
-- ⚡ Feedback visual em tempo real
-- 📊 Estatísticas detalhadas do processamento
-- 💾 Download em múltiplos formatos (TXT, JSON)
-- 📋 Copiar para clipboard
+## 📦 Tecnologias
 
-**Screenshot:**
-![Interface](docs/interface-preview.png)
+| Categoria | Tecnologia |
+|-----------|------------|
+| **Extração de PDFs** | Unstructured.io |
+| **LLM** | OpenAI GPT-5 |
+| **RAG** | LangChain + FAISS |
+| **Embeddings** | text-embedding-3-small |
+| **Interface** | Streamlit + Typer |
+| **Formato saída** | python-docx |
 
-Veja mais detalhes em [UI_GUIDE.md](UI_GUIDE.md)
+---
 
-## 🏗️ Arquitetura
+## 🚀 Instalação Rápida
 
-O sistema utiliza um pipeline de processamento com dois agentes de IA:
-
-```
-PDF Upload → Extração → Estruturação (IA) → Agente Redator → Agente Revisor → Memorial Final
-```
-
-### Componentes:
-
-1. **Módulo de Upload** - API FastAPI para receber PDFs
-2. **Extrator de PDF** - PyMuPDF para extração de texto e imagens
-3. **Parser de Documentos** - IA para estruturar informações
-4. **Agente Redator** - IA para gerar rascunho do memorial
-5. **Agente Revisor** - IA para revisar e finalizar o documento
-
-## 🚀 Instalação
-
-### Pré-requisitos
-
+### Requisitos
 - Python 3.10+
-- pip
+- Tesseract OCR
+- Poppler (pdf2image)
+- LibreOffice (opcional, para converter .doc)
 
-### Passos:
-
-1. Clone o repositório:
+### Fedora/RHEL:
 ```bash
-git clone <seu-repositorio>
+sudo dnf install python3 tesseract tesseract-langpack-por poppler-utils libreoffice-core
+```
+
+### Ubuntu/Debian:
+```bash
+sudo apt install python3 python3-venv tesseract-ocr tesseract-ocr-por poppler-utils libreoffice-writer
+```
+
+### Instalação:
+```bash
+# Clone o repositório
+git clone <repo-url>
 cd Memorial-descritivo
+
+# Execute o script de setup
+bash setup.sh
+
+# Ou manualmente:
+python3 -m venv venv
+source venv/bin/activate
+pip install -e .
 ```
 
-2. Crie um ambiente virtual:
+### Configuração:
 ```bash
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# ou
-venv\Scripts\activate  # Windows
+# Copie o template
+cp env.example .env
+
+# Edite e adicione sua API key
+nano .env
 ```
 
-3. Instale as dependências:
-```bash
-pip install -r requirements.txt
-```
-
-4. Configure as variáveis de ambiente:
-```bash
-cp .env.example .env
-# Edite o arquivo .env e adicione sua chave da OpenAI
-```
-
-5. Configure os arquivos de contexto:
-   - Edite `context_files/abnt_rules.txt` com as regras ABNT específicas
-   - Edite `context_files/client_template.txt` com o template do cliente
-
-## ⚙️ Configuração
-
-### Variáveis de Ambiente (.env)
-
+Adicione:
 ```env
-OPENAI_API_KEY=sua_chave_aqui
-OPENAI_MODEL=gpt-4o
-DEBUG=False
+OPENAI_API_KEY=sk-proj-...
+LLM_MODEL=gpt-5
+UNSTRUCTURED_STRATEGY=hi_res
 ```
 
-### Arquivos de Contexto
+---
 
-- **abnt_rules.txt**: Regras e normas ABNT para memoriais descritivos
-- **client_template.txt**: Template/estrutura desejada pelo cliente
+## 💻 Uso
 
-## 🔧 Uso
-
-### Iniciar o servidor:
+### Interface Web (Recomendado)
 
 ```bash
-python -m app.main
-# ou
-uvicorn app.main:app --reload
+streamlit run ui/app.py
 ```
 
-O servidor estará disponível em: `http://localhost:8000`
+Acesse: http://localhost:8501
 
-### Documentação da API:
+**Workflow:**
+1. Upload PDFs de plantas
+2. Upload memoriais-modelo (DOCX) - opcional
+3. Upload logo - opcional
+4. Configure API key e modelo
+5. Clique em "Gerar Memorial"
+6. Download do DOCX gerado
 
-Acesse a documentação interativa em:
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
-
-### Endpoint Principal:
-
-**POST** `/api/v1/generate_memorial`
-
-**Parâmetros:**
-- `file`: PDF do projeto (multipart/form-data)
-- `client_id`: ID do cliente (opcional, padrão: "default")
-- `include_images`: Incluir análise de imagens (opcional)
-- `custom_instructions`: Instruções adicionais (opcional)
-
-**Resposta:**
-```json
-{
-  "memorial_text": "Texto completo do memorial...",
-  "structured_data": {
-    "project_name": "Nome do Projeto",
-    "client_name": "Nome do Cliente",
-    "area_total_m2": 250.5,
-    ...
-  },
-  "processing_time_seconds": 45.2,
-  "pages_processed": 15,
-  "warnings": []
-}
-```
-
-### Exemplo com cURL:
+### CLI
 
 ```bash
-curl -X POST "http://localhost:8000/api/v1/generate_memorial" \
-  -H "accept: application/json" \
-  -H "Content-Type: multipart/form-data" \
-  -F "file=@projeto.pdf" \
-  -F "client_id=default"
+memorial-make generate \
+  --pdf-dir=projetos_plantas \
+  --modelos-dir=memorial \
+  --out-dir=out \
+  --llm-model=gpt-5 \
+  --parallel
 ```
 
-### Exemplo com Python:
+**Opções:**
+- `--pdf-dir`: Diretório com PDFs de projeto
+- `--modelos-dir`: Diretório com memoriais-modelo (.docx)
+- `--logo`: Caminho para logo PNG
+- `--out-dir`: Diretório de saída (padrão: `./out`)
+- `--llm-model`: Modelo LLM (gpt-5, gpt-4o, etc.)
+- `--parallel/--sequential`: Processar seções em paralelo
+- `-v, --verbose`: Modo verbose
 
-```python
-import requests
-
-url = "http://localhost:8000/api/v1/generate_memorial"
-files = {"file": open("projeto.pdf", "rb")}
-data = {"client_id": "default"}
-
-response = requests.post(url, files=files, data=data)
-result = response.json()
-
-print(result["memorial_text"])
-```
+---
 
 ## 📁 Estrutura do Projeto
 
 ```
-memorial_automator/
-├── app/
-│   ├── __init__.py
-│   ├── main.py                 # FastAPI application
-│   ├── core/
-│   │   ├── __init__.py
-│   │   └── config.py          # Configuration
-│   ├── services/
-│   │   ├── __init__.py
-│   │   ├── pdf_extractor.py   # PDF extraction
-│   │   ├── document_parser.py # AI-powered parsing
-│   │   └── agent_service.py   # Writer & Reviewer agents
-│   └── models/
-│       ├── __init__.py
-│       └── schemas.py         # Pydantic models
-├── context_files/
-│   ├── abnt_rules.txt         # ABNT rules
-│   └── client_template.txt    # Client template
-├── temp_uploads/              # Temporary file storage
-├── requirements.txt
-├── .env
+Memorial-descritivo/
+├── memorial_maker/          # Código principal
+│   ├── cli.py              # Interface CLI
+│   ├── config.py           # Configurações
+│   ├── extract/            # Extração de PDFs
+│   │   ├── unstructured_extract.py  # Extração com Unstructured
+│   │   ├── carimbo.py      # Extração de carimbos
+│   │   └── tables.py       # Processamento de tabelas
+│   ├── normalize/          # Normalização de dados
+│   │   ├── canonical_map.py
+│   │   └── consolidate.py
+│   ├── rag/                # RAG & Geração
+│   │   ├── index_style.py  # Indexação de modelos
+│   │   ├── generate_sections.py  # Geração de seções
+│   │   └── prompts/        # Templates de prompts
+│   ├── writer/             # Geração DOCX
+│   │   ├── write_docx.py
+│   │   └── docx_styles.py
+│   └── utils/              # Utilidades
+├── ui/                     # Interface Streamlit
+│   └── app.py
+├── tests/                  # Testes
+├── memorial/               # Memoriais-modelo
+├── projetos_plantas/       # PDFs de exemplo
+├── pyproject.toml          # Dependências
+├── setup.sh                # Script de instalação
 └── README.md
 ```
 
-## 🧠 Como Funciona
+---
 
-### 1. Extração de PDF
-- Extrai texto completo do PDF usando PyMuPDF
-- Captura metadados (autor, data, etc.)
-- Opcionalmente extrai imagens para análise
+## 🎯 Workflow Completo
 
-### 2. Estruturação com IA
-- Um LLM analisa o texto extraído
-- Identifica informações-chave (nome do projeto, área, materiais, etc.)
-- Retorna dados estruturados em JSON
+```mermaid
+graph LR
+    A[PDFs] --> B[Unstructured.io]
+    B --> C[Extração: Texto + Tabelas]
+    C --> D[Normalização]
+    D --> E[Consolidação]
+    
+    F[Memoriais-Modelo] --> G[Indexação RAG]
+    G --> H[FAISS]
+    
+    E --> I[GPT-5]
+    H --> I
+    I --> J[Seções Geradas]
+    J --> K[DOCX Final]
+```
 
-### 3. Agente Redator
-- Recebe dados estruturados + regras ABNT + template do cliente
-- Gera um rascunho completo do memorial descritivo
-- Segue estritamente o formato especificado
+### Etapas:
 
-### 4. Agente Revisor
-- Analisa o rascunho quanto a:
-  - Consistência com dados originais
-  - Conformidade com ABNT
-  - Aderência ao template
-  - Clareza e profissionalismo
-- Retorna versão final corrigida
+1. **Extração** (Unstructured.io)
+   - Particiona PDFs
+   - Detecta tabelas com YOLOX
+   - OCR quando necessário
+   - Extrai texto estruturado
 
-## 🔒 Segurança
+2. **Normalização**
+   - Mapeia nomes de itens
+   - Padroniza unidades
+   - Agrupa por categoria
 
-- Arquivos temporários são deletados após processamento
-- Validação de tipo e tamanho de arquivo
-- Tratamento de erros robusto
-- Logs detalhados para auditoria
+3. **Consolidação**
+   - Totaliza quantidades
+   - Agrupa por pavimento/serviço
+   - Exporta CSVs
 
-## 🚧 Melhorias Futuras
+4. **RAG** (Opcional)
+   - Indexa memoriais-modelo
+   - Cria embeddings com FAISS
+   - Recupera exemplos de estilo
 
-- [ ] Análise multimodal de imagens (plantas, diagramas)
-- [ ] Suporte a templates múltiplos por cliente
-- [ ] Cache de resultados
-- [ ] Processamento assíncrono para PDFs grandes
-- [ ] Interface web para upload e visualização
-- [ ] Exportação em formatos variados (Word, PDF formatado)
-- [ ] Integração com sistemas de gerenciamento de projetos
+5. **Geração** (GPT-5)
+   - Prompt engineering
+   - Geração paralela de seções
+   - Formatação técnica
+
+6. **Escrita**
+   - Aplica estilos DOCX
+   - Adiciona tabelas e imagens
+   - Gera documento final
+
+---
+
+## ⚙️ Configurações Avançadas
+
+### Estratégias de Extração
+
+Em `.env`:
+```env
+# Estratégia: fast, hi_res, ocr_only, auto
+UNSTRUCTURED_STRATEGY=hi_res
+
+# Modelo para detecção de tabelas
+UNSTRUCTURED_MODEL_NAME=yolox
+
+# Opções
+EXTRACT_IMAGES=true
+EXTRACT_TABLES=true
+CHUNK_BY_TITLE=true
+```
+
+### Configuração de LLM
+
+```env
+LLM_MODEL=gpt-5
+LLM_TEMPERATURE=0.0
+LLM_MAX_TOKENS=4096
+EMBED_MODEL=text-embedding-3-small
+```
+
+---
+
+## 📊 Performance
+
+### Comparação Docling vs Unstructured
+
+| Métrica | Docling (v0.1) | Unstructured (v0.2) |
+|---------|----------------|---------------------|
+| Instalação | ~15 min | ~5 min |
+| Tamanho | ~3 GB | ~1 GB |
+| Processamento/PDF | 3-4 min | 1-2 min |
+| Qualidade tabelas | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+
+---
+
+## 🐛 Solução de Problemas
+
+### Erro: "No module named 'unstructured'"
+```bash
+pip install "unstructured[pdf]"
+```
+
+### Erro: "pdf2image requires poppler"
+```bash
+sudo dnf install poppler-utils  # Fedora
+sudo apt install poppler-utils  # Ubuntu
+```
+
+### Erro ao ler .doc
+```bash
+# Converte para .docx
+python convert_doc_to_docx.py
+```
+
+### Tabelas não detectadas
+Use estratégia `hi_res`:
+```env
+UNSTRUCTURED_STRATEGY=hi_res
+```
+
+---
+
+## 📚 Documentação
+
+- [QUICKSTART.md](QUICKSTART.md) - Início rápido
+- [USAGE.md](USAGE.md) - Guia de uso detalhado
+- [INSTALL.md](INSTALL.md) - Instalação passo-a-passo
+- [MIGRATION_NOTES.md](MIGRATION_NOTES.md) - Notas de migração Docling → Unstructured
+- [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) - Visão geral do projeto
+
+---
+
+## 🔄 Migração de Versão Anterior
+
+Se você estava usando a versão com Docling:
+
+```bash
+# Leia as notas de migração
+cat MIGRATION_NOTES.md
+
+# Reinstale
+rm -rf venv/
+python3 -m venv venv
+source venv/bin/activate
+pip install -e .
+
+# Converta memoriais .doc
+python convert_doc_to_docx.py
+```
+
+---
+
+## 🤝 Contribuição
+
+Contribuições são bem-vindas! Por favor:
+
+1. Fork o projeto
+2. Crie uma branch (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -am 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
+
+---
 
 ## 📝 Licença
 
-[Especifique sua licença]
+MIT License - veja [LICENSE](LICENSE) para detalhes.
 
-## 👥 Contribuindo
+---
 
-Contribuições são bem-vindas! Por favor, abra uma issue ou pull request.
+## 🙏 Agradecimentos
+
+- [Unstructured.io](https://unstructured.io) - Extração de documentos
+- [OpenAI](https://openai.com) - GPT-5 e embeddings
+- [LangChain](https://langchain.com) - Framework RAG
+
+---
 
 ## 📞 Suporte
 
-Para dúvidas ou suporte, entre em contato em [seu-email]
+Para dúvidas ou problemas:
+- Abra uma [issue](https://github.com/seu-repo/issues)
+- Email: contato@tecpred.com
 
+---
+
+**Desenvolvido com ❤️ para TecPred**

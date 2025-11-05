@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "memorial-maker"
+version = "0.1.0"
+description = "Geração automática de Memorial Descritivo de Telecomunicações com RAG"
+authors = [{name = "TecPred", email = "contato@tecpred.com"}]
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+dependencies = [
+    "unstructured[pdf]>=0.10.0",
+    "python-docx>=1.0.0",
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "typer>=0.9.0",
+    "rich>=13.0.0",
+    "streamlit>=1.28.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "langchain>=0.1.0",
+    "langchain-openai>=0.0.5",
+    "langchain-community>=0.0.20",
+    "openai>=1.0.0",
+    "faiss-cpu>=1.7.4",
+    "sentence-transformers>=2.2.0",
+    "openpyxl>=3.1.0",
+    "Pillow>=10.0.0",
+    "pdf2image>=1.16.0",
+    "pytesseract>=0.3.10",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+
+[project.scripts]
+memorial-make = "memorial_maker.cli:app"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["memorial_maker*"]
+
+[tool.black]
+line-length = 100
+target-version = ['py310']
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+
+
+

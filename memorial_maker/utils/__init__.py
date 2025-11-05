@@ -1,0 +1,7 @@
+"""Utilitários gerais."""
+
+
+
+
+
+
