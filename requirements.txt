@@ -1,13 +1,13 @@
-# Core dependencies
+# Core - Extração com Unstructured
 unstructured[pdf]>=0.10.0
-python-docx>=1.0.0
-numpy>=1.24.0
-pandas>=2.0.0
-pdf2image>=1.16.0
-pytesseract>=0.3.10
 
-# CLI & UI
-typer>=0.9.0
+# Geração de documento Word
+python-docx>=1.0.0
+
+# Processamento de dados
+pandas>=2.0.0
+
+# UI & Logging
 rich>=13.0.0
 streamlit>=1.28.0
 
@@ -22,11 +22,6 @@ langchain-community>=0.0.20
 openai>=1.0.0
 faiss-cpu>=1.7.4
 sentence-transformers>=2.2.0
-
-# Document processing
-openpyxl>=3.1.0
-Pillow>=10.0.0
-tabula-py>=2.8.0
 
 # Dev dependencies
 pytest>=7.4.0

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Script de teste para diagnóstico de extração"""
+"""Script de teste para extração com Unstructured.io"""
 
 from pathlib import Path
 import sys
@@ -7,14 +7,14 @@ import sys
 # Adiciona o diretório ao path
 sys.path.insert(0, str(Path(__file__).parent))
 
-from memorial_maker.extract.unstructured_extract import extract_pdf_unstructured, extract_text_from_elements
+from memorial_maker.extract import extract_pdf_unstructured, extract_text_from_elements, extract_tables_structured
 from memorial_maker.normalize.canonical_map import ItemExtractor
 
 
 def test_extraction():
-    """Testa extração e normalização"""
+    """Testa extração com Unstructured e normalização"""
     
-    print("🧪 TESTE DE EXTRAÇÃO - Memorial Maker\n")
+    print("🧪 TESTE DE EXTRAÇÃO - Unstructured.io\n")
     print("="*60)
     
     # 1. Verifica PDF
@@ -26,11 +26,11 @@ def test_extraction():
         return
     
     pdf = pdfs[0]
-    print(f"\n📄 Testando PDF: {pdf.name}")
+    print(f"\n📄 PDF: {pdf.name}")
     print(f"📏 Tamanho: {pdf.stat().st_size / 1024:.1f} KB")
     
     # 2. Extrai com Unstructured
-    print("\n🔄 Extraindo com Unstructured...")
+    print("\n🔄 Extraindo com Unstructured.io...")
     out_dir = Path("out/teste_diagnostico")
     out_dir.mkdir(parents=True, exist_ok=True)
     
@@ -54,11 +54,18 @@ def test_extraction():
     keywords = ["RJ", "CAT", "PONTO", "CABO", "UTP", "ITEM", "DESCRIÇÃO", "QUANT"]
     print(f"\n🔍 Palavras-chave encontradas:")
     for kw in keywords:
-        count = full_text.count(kw)
+        count = full_text.upper().count(kw.upper())
         status = "✅" if count > 0 else "❌"
         print(f"   {status} {kw}: {count}x")
     
-    # 6. Testa normalização
+    # 6. Testa extração estruturada de tabelas
+    if result['tables']:
+        print(f"\n📊 Tabelas estruturadas:")
+        tables = extract_tables_structured(result)
+        for table in tables[:3]:
+            print(f"   - Tabela {table['table_id']}: {len(table['text'])} caracteres")
+    
+    # 7. Testa normalização
     print(f"\n🔧 Testando normalização...")
     extractor = ItemExtractor()
     items = extractor.extract_from_text(full_text, {"filename": pdf.name})
@@ -71,24 +78,18 @@ def test_extraction():
             print(f"   {i}. {item.get('item_type', 'N/A')}: {item.get('quantity', '?')} {item.get('unit', '')}")
     else:
         print("⚠️  NENHUM ITEM EXTRAÍDO!")
-        print("\n💡 Sugestões:")
-        print("   1. Use estratégia 'hi_res' para melhor detecção de tabelas")
-        print("   2. Verifique se o PDF tem tabelas de quantitativos")
-        print("   3. Considere adicionar parser customizado para seus PDFs")
+        print("\n💡 Dicas:")
+        print("   • Use UNSTRUCTURED_STRATEGY=hi_res para melhor OCR")
+        print("   • Verifique se o PDF tem tabelas de quantitativos")
+        print("   • Confira o JSON gerado em out/teste_diagnostico/")
     
-    # 7. Verifica se há tabelas estruturadas
-    if result['tables']:
-        print(f"\n📊 Primeira tabela:")
-        print("-" * 60)
-        print(result['tables'][0]['text'][:300])
-        print("-" * 60)
-    
+    # 8. Resumo
     print(f"\n{'='*60}")
     print("🎯 RESUMO:")
     print(f"   Extração: {'✅ OK' if result['total_elements'] > 0 else '❌ FALHOU'}")
     print(f"   Texto: {'✅ OK' if len(full_text) > 100 else '❌ VAZIO'}")
     print(f"   Tabelas: {'✅ Detectadas' if result['tables'] else '⚠️  Não detectadas'}")
-    print(f"   Normalização: {'✅ OK' if items else '❌ Nenhum item extraído'}")
+    print(f"   Normalização: {'✅ OK' if items else '❌ Nenhum item'}")
     print(f"{'='*60}\n")
 
 
