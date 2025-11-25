@@ -62,43 +62,6 @@ def main():
     st.markdown("**Geração automática de Memorial Descritivo de Telecomunicações**")
     st.markdown("---")
     
-    # Sidebar: Configurações
-    with st.sidebar:
-        st.header("⚙️ Configurações")
-        
-        # API Key
-        api_key = st.text_input(
-            "OpenAI API Key",
-            type="password",
-            value=settings.openai_api_key,
-            help="Sua chave de API da OpenAI",
-        )
-        if api_key:
-            settings.openai_api_key = api_key
-        
-        # Modelo LLM
-        llm_model = st.selectbox(
-            "Modelo LLM",
-            ["gpt-5", "gpt-4o", "gpt-4o-mini", "gpt-4-turbo"],
-            index=0,
-        )
-        settings.llm_model = llm_model
-        
-        # DPI
-        dpi = st.slider("DPI para PDFs", 150, 600, 300, 50)
-        settings.dpi = dpi
-        
-        # Processamento paralelo
-        parallel = st.checkbox("Processamento paralelo", value=True)
-        settings.parallel_execution = parallel
-        
-        st.markdown("---")
-        st.markdown("### 📚 Sobre")
-        st.markdown(
-            "Esta ferramenta usa **Unstructured.io** para extração, "
-            "**RAG** para estilo/estrutura, e **GPT-5** para redação técnica."
-        )
-    
     # Upload de arquivos
     st.header("📤 1. Upload de Arquivos")
     
@@ -139,11 +102,11 @@ def main():
         return
     
     if not settings.openai_api_key:
-        st.error("❌ Configure sua OpenAI API Key na barra lateral")
+        st.error("❌ Configure sua OpenAI API Key no arquivo .env")
         return
     
     if st.button("🎯 Gerar Memorial Descritivo", type="primary", use_container_width=True):
-        generate_memorial(pdf_files, model_files, parallel)
+        generate_memorial(pdf_files, model_files, settings.parallel_execution)
     
     # Resultados
     if st.session_state.generated:

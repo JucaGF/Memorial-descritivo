@@ -7,7 +7,6 @@ from typing import Dict, List, Any
 from collections import defaultdict
 
 from memorial_maker.utils.logging import get_logger
-from memorial_maker.extract.carimbo import merge_carimbo_data
 
 logger = get_logger("normalize.consolidate")
 
@@ -70,24 +69,34 @@ class DataConsolidator:
         return master
 
     def _consolidate_obra_data(self, extractions: List[Dict]) -> Dict[str, Any]:
-        """Consolida dados da obra."""
-        carimbo_data = merge_carimbo_data(extractions)
+        """Consolida dados da obra.
         
+        Nota: Dados de carimbo podem ser extraídos manualmente ou
+        do texto extraído pelo Unstructured.
+        """
+        # Tenta extrair dados básicos dos filenames ou metadados
         obra = {
-            "construtora": carimbo_data.get("construtora", ""),
-            "empreendimento": carimbo_data.get("empreendimento", ""),
-            "endereco": carimbo_data.get("endereco", ""),
+            "construtora": "",
+            "empreendimento": "",
+            "endereco": "",
             "tipologia": "",  # Será preenchido com pavimentos
             "pavimentos": [],
             "carimbo": {
-                "projeto": carimbo_data.get("projeto", ""),
-                "revisao": carimbo_data.get("revisao", ""),
-                "data": carimbo_data.get("data", ""),
-                "escala": carimbo_data.get("escala", ""),
-                "autor": carimbo_data.get("autor", ""),
-                "arquivo": carimbo_data.get("arquivo", ""),
+                "projeto": "",
+                "revisao": "",
+                "data": "",
+                "escala": "",
+                "autor": "",
+                "arquivo": "",
             }
         }
+        
+        # Extrai do primeiro arquivo se houver metadados
+        if extractions:
+            first = extractions[0]
+            if "metadata" in first:
+                meta = first["metadata"]
+                obra["carimbo"]["arquivo"] = meta.get("source", "")
         
         return obra
 
@@ -292,6 +301,11 @@ def consolidate_and_export(
     consolidator.export_csvs(master, output_dir)
     
     return master
+
+
+
+
+
 
 
 

@@ -2,8 +2,6 @@
 
 import os
 from pathlib import Path
-from typing import Optional
-
 from pydantic_settings import BaseSettings
 
 
@@ -12,7 +10,7 @@ class Settings(BaseSettings):
 
     # LLM
     openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
-    llm_model: str = os.getenv("LLM_MODEL", "gpt-5")
+    llm_model: str = os.getenv("LLM_MODEL", "gpt-4o-mini")
     embed_model: str = os.getenv("EMBED_MODEL", "text-embedding-3-small")
     llm_temperature: float = 0.0
     llm_top_p: float = 0.1
@@ -23,10 +21,6 @@ class Settings(BaseSettings):
     unstructured_model_name: str = "yolox"  # para detecção de tabelas
     extract_images: bool = os.getenv("EXTRACT_IMAGES", "true").lower() == "true"
     extract_tables: bool = True
-    chunk_by_title: bool = True
-    
-    # Configurações de imagem/PDF (para compatibilidade)
-    dpi: int = 300
 
     # Processamento
     parallel_execution: bool = True
