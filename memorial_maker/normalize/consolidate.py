@@ -69,34 +69,55 @@ class DataConsolidator:
         return master
 
     def _consolidate_obra_data(self, extractions: List[Dict]) -> Dict[str, Any]:
-        """Consolida dados da obra.
+        """Consolida dados da obra extraídos dos carimbos dos PDFs.
         
-        Nota: Dados de carimbo podem ser extraídos manualmente ou
-        do texto extraído pelo Unstructured.
+        Args:
+            extractions: Lista de extrações com dados de carimbo
+            
+        Returns:
+            Dados consolidados da obra
         """
-        # Tenta extrair dados básicos dos filenames ou metadados
         obra = {
             "construtora": "",
             "empreendimento": "",
             "endereco": "",
-            "tipologia": "",  # Será preenchido com pavimentos
+            "tipologia": "",
             "pavimentos": [],
             "carimbo": {
                 "projeto": "",
                 "revisao": "",
                 "data": "",
-                "escala": "",
                 "autor": "",
-                "arquivo": "",
             }
         }
         
-        # Extrai do primeiro arquivo se houver metadados
-        if extractions:
-            first = extractions[0]
-            if "metadata" in first:
-                meta = first["metadata"]
-                obra["carimbo"]["arquivo"] = meta.get("source", "")
+        # Coleta dados de todos os carimbos extraídos
+        carimbos = []
+        for extraction in extractions:
+            carimbo = extraction.get("carimbo", {})
+            if carimbo:
+                carimbos.append(carimbo)
+        
+        if not carimbos:
+            logger.warning("Nenhum carimbo extraído dos PDFs")
+            return obra
+        
+        # Usa o carimbo mais completo (com mais campos preenchidos)
+        carimbo_principal = max(carimbos, key=lambda c: len([v for v in c.values() if v]))
+        
+        # Preenche dados da obra
+        obra["empreendimento"] = carimbo_principal.get("empreendimento", "")
+        obra["construtora"] = carimbo_principal.get("construtora", "")
+        obra["endereco"] = carimbo_principal.get("endereco", "")
+        
+        # Preenche dados do carimbo (apenas campos relevantes)
+        obra["carimbo"]["projeto"] = carimbo_principal.get("projeto", "")
+        obra["carimbo"]["revisao"] = carimbo_principal.get("revisao", "")
+        obra["carimbo"]["data"] = carimbo_principal.get("data", "")
+        obra["carimbo"]["autor"] = carimbo_principal.get("autor", "")
+        # Removido: escala e arquivo (não devem aparecer no memorial)
+        
+        logger.info(f"Dados da obra extraídos: {obra['empreendimento'] or '(vazio)'}")
         
         return obra
 
