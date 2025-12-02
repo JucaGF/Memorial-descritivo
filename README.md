@@ -169,7 +169,3 @@ pytest tests/
 # Formatação
 black memorial_maker/
 ```
-
----
-
-**Desenvolvido com ❤️ por TecPred**

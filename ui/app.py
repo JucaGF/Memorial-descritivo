@@ -91,6 +91,7 @@ def main():
     
     # Info sobre logo
     st.info("🏢 Logo TecPred será incluído automaticamente no memorial")
+    st.info("📋 Dados da obra (empreendimento, construtora, endereço) serão extraídos automaticamente do carimbo das plantas")
     
     st.markdown("---")
     
@@ -182,7 +183,7 @@ def generate_memorial(pdf_files, model_files, parallel):
             normalized_items = normalize_all_items(raw_items)
             progress_bar.progress(45)
             
-            # 3. Consolidação
+            # 3. Consolidação (inclui extração automática de carimbo)
             status_text.text("📊 Consolidando e exportando CSVs...")
             master_data = consolidate_and_export(
                 extractions,

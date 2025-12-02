@@ -7,8 +7,9 @@ from typing import Dict, Optional
 from docx import Document
 
 from memorial_maker.writer.docx_styles import (
+    setup_document_margins,
     setup_styles,
-    add_cover_page,
+    add_header_footer,
     add_section_heading,
     add_body_text,
 )
@@ -20,14 +21,16 @@ logger = get_logger("writer.docx")
 class MemorialWriter:
     """Escritor de Memorial em DOCX."""
 
-    def __init__(self, logo_path: Optional[Path] = None):
+    def __init__(self):
         """Inicializa writer.
         
-        Args:
-            logo_path: Caminho para logo TecPred
         """
-        self.logo_path = str(logo_path) if logo_path else None
         self.doc = Document()
+        
+        # Configura margens conforme modelo
+        setup_document_margins(self.doc)
+        
+        # Configura estilos
         setup_styles(self.doc)
 
     def write_memorial(
@@ -45,14 +48,31 @@ class MemorialWriter:
         """
         logger.info(f"Escrevendo memorial: {output_path}")
         
-        # Capa
+        # Debug: verifica estrutura do master_data
+        logger.info(f"Master data keys: {list(master_data.keys())}")
+        if "obra" in master_data:
+            logger.info(f"Obra keys: {list(master_data['obra'].keys())}")
+        
+        # Dados do projeto
         project_data = {
             "empreendimento": master_data.get("obra", {}).get("empreendimento", ""),
             "construtora": master_data.get("obra", {}).get("construtora", ""),
             "endereco": master_data.get("obra", {}).get("endereco", ""),
             "carimbo": master_data.get("obra", {}).get("carimbo", {}),
         }
-        add_cover_page(self.doc, self.logo_path, project_data)
+        
+        logger.info(f"Project data: {project_data}")
+        
+        # Adiciona cabeçalho e rodapé (para todas as páginas)
+        add_header_footer(self.doc, project_data)
+        
+        # Capa do memorial
+        from memorial_maker.writer.docx_styles import add_cover_page
+        add_cover_page(self.doc, None, project_data)
+        
+        # Sumário
+        from memorial_maker.writer.docx_styles import add_table_of_contents
+        add_table_of_contents(self.doc)
         
         # Seções na ordem
         self._write_section_1(sections.get("s1_introducao", ""))
@@ -145,7 +165,7 @@ def write_memorial_docx(
     filename = f"MEMORIAL_{project_name}_{timestamp}.docx"
     output_path = output_dir / filename
     
-    writer = MemorialWriter(logo_path)
+    writer = MemorialWriter()
     writer.write_memorial(sections, master_data, output_path)
     
     return output_path

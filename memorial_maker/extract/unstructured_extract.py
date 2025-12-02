@@ -13,6 +13,151 @@ from memorial_maker.utils.logging import get_logger
 logger = get_logger("extract.unstructured")
 
 
+def extract_carimbo_from_text(text: str) -> Dict[str, str]:
+    """Extrai informações do carimbo (canto inferior direito) do texto.
+    
+    O carimbo pode estar em diferentes formatos:
+    1. Labels e valores na mesma linha: PROJETO: Valor
+    2. Labels em uma linha, valores nas linhas seguintes
+    
+    Args:
+        text: Texto extraído do PDF
+        
+    Returns:
+        Dicionário com dados do carimbo
+    """
+    import re
+    
+    carimbo_data = {}
+    
+    # Primeiro, procura pelo padrão onde todos os labels estão juntos
+    # PROJETO: CONSTRUTOR: EDIFÍCIO: LOCAL: Escala:
+    # E os valores vêm nas linhas seguintes
+    pattern_labels = r'PROJETO:\s*CONSTRUTOR:\s*EDIF[ÍI]CIO:\s*LOCAL:'
+    match_labels = re.search(pattern_labels, text, re.IGNORECASE)
+    
+    if match_labels:
+        # Encontrou o padrão com labels juntos
+        # Pega o texto após os labels
+        start_pos = match_labels.end()
+        # Pega as próximas 1500 caracteres para ter mais contexto
+        text_after = text[start_pos:start_pos + 1500]
+        
+        # Divide em linhas e pega os valores
+        lines = [l.strip() for l in text_after.split('\n') if l.strip()]
+        
+        # Mapeia valores baseado na ordem esperada
+        # Linha 0: Escala: (descartamos ou pegamos depois)
+        # Linha 1: Nome do projeto (ex: PROJETO DE INSTALAÇÕES DE TELECOMUNICAÇÃO)
+        # Linha 2: Construtora (ex: MGA CONSTRUÇÕES E INCORPORAÇÕES LTDA)
+        # Linha 3: Empreendimento (ex: MAKAI)
+        # Linha 4: Endereço (ex: AVENIDA MAX ZAGEL, S/N...)
+        # Linha 5+: Outras informações
+        
+        if len(lines) >= 1:
+            # Primeira linha pode ser "Escala:" ou já ser o projeto
+            first_line = lines[0]
+            if 'Escala:' in first_line or 'ESCALA:' in first_line.upper():
+                # Pula essa linha e pega as próximas
+                value_lines = lines[1:]
+            else:
+                value_lines = lines
+            
+            # Agora pega os valores na ordem: projeto, construtora, empreendimento
+            # Mas o endereço pode estar em qualquer posição, então procuramos em todas as linhas
+            
+            if len(value_lines) >= 1:
+                projeto = value_lines[0]
+                if 'PROJETO' not in projeto.upper() or 'DE ' in projeto or 'INSTALAÇÃO' in projeto.upper():
+                    carimbo_data["projeto"] = projeto
+                    
+            if len(value_lines) >= 2:
+                construtora = value_lines[1]
+                if len(construtora) > 3 and 'EDIFÍCIO' not in construtora.upper():
+                    carimbo_data["construtora"] = construtora
+                    
+            if len(value_lines) >= 3:
+                empreendimento = value_lines[2]
+                if len(empreendimento) > 2 and empreendimento != 'LOCAL':
+                    carimbo_data["empreendimento"] = empreendimento
+            
+            # Procura por endereço em TODAS as linhas (não só na posição 3)
+            # porque o texto pode estar em ordem diferente da visual
+            for i, line in enumerate(value_lines):
+                # Ignora linhas já identificadas como projeto, construtora, empreendimento
+                if i < 3:
+                    continue
+                
+                # Verifica se parece com um endereço
+                is_address = (
+                    ',' in line and len(line) > 15 and
+                    any(word in line.upper() for word in ['AVENIDA', 'RUA', 'AV.', 'R.', 'LOTE', 'QUADRA', 'TRAVESSA', 'AL.', 'ALAMEDA'])
+                )
+                
+                if is_address and "endereco" not in carimbo_data:
+                    carimbo_data["endereco"] = line
+                    logger.info(f"Endereço encontrado na linha {i}: {line}")
+                    break
+                
+                # Procura por escala
+                if '/' in line and len(line) < 10 and "escala" not in carimbo_data:
+                    carimbo_data["escala"] = line
+        
+        logger.info(f"Carimbo extraído (formato labels juntos): {list(carimbo_data.keys())}")
+        
+    else:
+        # Tenta padrões tradicionais com labels e valores na mesma linha
+        patterns = {
+            "projeto": r"PROJETO\s*:\s*([^\n]+?)(?=\s*(?:CONSTRUTOR|EDIF[ÍI]CIO|LOCAL|DATA|$))",
+            "construtora": r"CONSTRUTOR\s*:\s*([^\n]+?)(?=\s*(?:EDIF[ÍI]CIO|LOCAL|DATA|$))",
+            "empreendimento": r"EDIF[ÍI]CIO\s*:\s*([^\n]+?)(?=\s*(?:LOCAL|DATA|$))",
+            "endereco": r"LOCAL\s*:\s*([^\n]+?)(?=\s*(?:DATA|Escala|$))",
+            "data": r"DATA\s*:\s*([0-9]{2}[\/\-][0-9]{2}[\/\-][0-9]{4})",
+            "escala": r"Escala\s*:\s*([^\n]+)",
+        }
+        
+        for key, pattern in patterns.items():
+            match = re.search(pattern, text, re.IGNORECASE | re.MULTILINE)
+            if match:
+                value = match.group(1).strip()
+                # Remove labels extras que possam ter sido capturados
+                value = re.sub(r'\s*(CONSTRUTOR|EDIF[ÍI]CIO|LOCAL|DATA|Escala)\s*:.*$', '', value, flags=re.IGNORECASE)
+                if value and len(value) > 1:
+                    carimbo_data[key] = value
+                    logger.debug(f"Carimbo - {key}: {value}")
+    
+    # Procura por data no formato dd/mm/yyyy em qualquer lugar próximo
+    if not carimbo_data.get("data"):
+        date_match = re.search(r'(\d{2}/\d{2}/\d{4})', text)
+        if date_match:
+            carimbo_data["data"] = date_match.group(1)
+    
+    # Se ainda não encontrou endereço, procura perto do carimbo no texto
+    # Busca por padrões comuns de endereço brasileiro que contenham palavras-chave de localização
+    if not carimbo_data.get("endereco"):
+        # Busca texto ao redor do empreendimento se tivermos essa informação
+        search_text = text
+        if carimbo_data.get("empreendimento"):
+            emp_pos = text.find(carimbo_data["empreendimento"])
+            if emp_pos > 0:
+                # Pega 2000 chars antes e depois do empreendimento
+                search_text = text[max(0, emp_pos - 2000):emp_pos + 2000]
+        
+        # Padrão: deve começar com AVENIDA/RUA/etc e conter LOTE ou QUADRA ou número da casa
+        # e ter cidade ou estado no final
+        endereco_pattern = r'((?:AVENIDA|AV\.|RUA|R\.|TRAVESSA|TRAV\.|ALAMEDA|AL\.)[^,]{5,100}(?:LOTE|QUADRA|N[ºo°]|S/N)[^,]{0,50},[^,]{3,60}(?:-\s*[A-Z]{2})?)'
+        
+        match = re.search(endereco_pattern, search_text, re.IGNORECASE)
+        if match:
+            endereco_candidate = match.group(1).strip()
+            # Remove quebras de linha e espaços extras
+            endereco_candidate = ' '.join(endereco_candidate.split())
+            carimbo_data["endereco"] = endereco_candidate
+            logger.info(f"Endereço encontrado via regex: {endereco_candidate[:60]}...")
+    
+    return carimbo_data
+
+
 def extract_pdf_unstructured(
     pdf_path: Path,
     output_dir: Path,
@@ -48,6 +193,7 @@ def extract_pdf_unstructured(
             "text": [],
             "tables": [],
             "metadata": {},
+            "carimbo": {},
         }
         
         # Processa cada elemento
@@ -77,6 +223,14 @@ def extract_pdf_unstructured(
                     "text": str(element),
                     "metadata": element.metadata.to_dict() if hasattr(element, 'metadata') else {}
                 })
+        
+        # Extrai informações do carimbo do texto completo
+        full_text = "\n".join([item["text"] for item in result["text"]])
+        carimbo_info = extract_carimbo_from_text(full_text)
+        result["carimbo"] = carimbo_info
+        
+        if carimbo_info:
+            logger.info(f"Carimbo extraído: {list(carimbo_info.keys())}")
         
         # Salva JSON com todos os elementos
         output_json = output_dir / f"{pdf_path.stem}_unstructured.json"

@@ -6,7 +6,7 @@ CONTEXTO
 
 ESTILO
 - Frases objetivas. Não criar campos que não existam no contexto.
-- Pode ser em formato de lista pontuada ou prosa curta.
+- Pode ser em formato de lista.
 - Mantenha profissionalismo e clareza.
 
 SAÍDA
