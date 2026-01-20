@@ -1,0 +1,19 @@
+OBJETIVO
+- Redija a subseção "Entrada de energia e medição".
+
+CONTEXTO
+- Use {contexto_factual.entrada_energia} com dados sobre:
+  - Tipo de fornecimento (monofásico, trifásico)
+  - Tensão nominal
+  - Localização da entrada
+  - Medição (individual, coletiva)
+  - Proteções de entrada
+
+ESTILO
+- 3–5 parágrafos, tom técnico detalhado.
+- Descreva o sistema de entrada de energia e medição conforme projeto.
+
+SAÍDA
+- NÃO incluir o título da seção no texto (será adicionado automaticamente).
+- Apenas o corpo da seção em prosa corrida.
+- Se dados específicos não estiverem disponíveis, use "conforme projeto" ou "de acordo com normas vigentes".

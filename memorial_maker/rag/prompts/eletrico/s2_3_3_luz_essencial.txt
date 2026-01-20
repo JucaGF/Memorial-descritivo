@@ -1,0 +1,18 @@
+OBJETIVO
+- Redija a subseção "Luz essencial / subestação abrigada".
+
+CONTEXTO
+- Use {contexto_factual.luz_essencial} com dados sobre:
+  - Sistema de luz essencial (se presente)
+  - Subestação abrigada (se presente)
+  - Gerador de emergência (se presente)
+  - Quadros de emergência
+
+ESTILO
+- 3–5 parágrafos, tom técnico detalhado.
+- Descreva o sistema de luz essencial e/ou subestação conforme projeto.
+
+SAÍDA
+- NÃO incluir o título da seção no texto (será adicionado automaticamente).
+- Apenas o corpo da seção em prosa corrida.
+- Se dados específicos não estiverem disponíveis, use "conforme projeto" ou "de acordo com normas vigentes".

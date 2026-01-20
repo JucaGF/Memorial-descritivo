@@ -1,8 +1,15 @@
 """Configurações globais do sistema."""
 
 import os
+from enum import Enum
 from pathlib import Path
 from pydantic_settings import BaseSettings
+
+
+class MemorialType(str, Enum):
+    """Tipos de memorial suportados."""
+    TELECOM = "telecom"
+    ELECTRICAL = "eletrico"
 
 
 class Settings(BaseSettings):
@@ -25,6 +32,11 @@ class Settings(BaseSettings):
     # Processamento
     parallel_execution: bool = True
     max_retries: int = 3
+
+    # OCR Configuration
+    ocr_workers: int = int(os.getenv("OCR_WORKERS", "4"))
+    ocr_cache_dir: Path = Path("./runtime/ocr_cache")
+    ocr_config_version: str = os.getenv("OCR_CONFIG_VERSION", "v1.0")
 
     # Caminhos
     runtime_dir: Path = Path("./runtime")

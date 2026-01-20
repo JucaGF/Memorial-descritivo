@@ -1,0 +1,14 @@
+OBJETIVO
+- Gere o Sumário (Table of Contents) do memorial elétrico.
+
+CONTEXTO
+- Use {contexto_factual.sections_presentes} para determinar quais seções incluir no sumário.
+- O sumário deve refletir apenas as seções que foram geradas (com conteúdo).
+
+ESTILO
+- Lista numerada das seções principais e subseções.
+- Formato padrão de sumário técnico.
+
+SAÍDA
+- NÃO incluir o título "SUMÁRIO" (será adicionado automaticamente).
+- Apenas a lista de seções com numeração e títulos.

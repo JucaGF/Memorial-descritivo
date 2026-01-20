@@ -1,0 +1,18 @@
+OBJETIVO
+- Redija a subseção "Quadros gerais de luz e força e acessórios".
+
+CONTEXTO
+- Use {contexto_factual.quadros} com dados sobre:
+  - Quadros de distribuição
+  - Disjuntores
+  - Dispositivos DR (se presente)
+  - Acessórios de quadros
+
+ESTILO
+- 3–5 parágrafos, tom técnico detalhado.
+- Descreva os quadros e acessórios conforme projeto.
+
+SAÍDA
+- NÃO incluir o título da seção no texto (será adicionado automaticamente).
+- Apenas o corpo da seção em prosa corrida.
+- Se dados específicos não estiverem disponíveis, use "conforme projeto" ou "de acordo com normas vigentes".

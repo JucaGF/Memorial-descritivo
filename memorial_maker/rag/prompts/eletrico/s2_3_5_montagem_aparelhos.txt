@@ -1,0 +1,18 @@
+OBJETIVO
+- Redija a subseção "Montagem de aparelhos".
+
+CONTEXTO
+- Use {contexto_factual.montagem_aparelhos} com dados sobre:
+  - Interruptores
+  - Tomadas
+  - Luminárias
+  - Outros aparelhos elétricos
+
+ESTILO
+- 2–4 parágrafos, tom técnico.
+- Descreva a montagem e instalação de aparelhos conforme projeto.
+
+SAÍDA
+- NÃO incluir o título da seção no texto (será adicionado automaticamente).
+- Apenas o corpo da seção em prosa corrida.
+- Se dados específicos não estiverem disponíveis, use "conforme projeto" ou "de acordo com normas vigentes".

@@ -5,10 +5,18 @@ from pathlib import Path
 from typing import List, Dict, Any
 import docx  # python-docx
 
-from langchain_community.vectorstores import FAISS
-from langchain_openai import OpenAIEmbeddings
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_core.documents import Document
+try:
+    from langchain_community.vectorstores import FAISS
+    from langchain_openai import OpenAIEmbeddings
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
+    from langchain_core.documents import Document
+    LANGCHAIN_AVAILABLE = True
+except ImportError:
+    LANGCHAIN_AVAILABLE = False
+    FAISS = None
+    OpenAIEmbeddings = None
+    RecursiveCharacterTextSplitter = None
+    Document = None
 
 from memorial_maker.config import settings
 from memorial_maker.utils.logging import get_logger
@@ -21,6 +29,12 @@ class StyleIndexer:
 
     def __init__(self):
         """Inicializa indexador."""
+        if not LANGCHAIN_AVAILABLE:
+            self.embeddings = None
+            self.text_splitter = None
+            self.vectorstore = None
+            return
+        
         self.embeddings = OpenAIEmbeddings(
             model=settings.embed_model,
             openai_api_key=settings.openai_api_key,
@@ -44,15 +58,19 @@ class StyleIndexer:
             logger.error(f"Erro ao carregar {doc_path.name}: {e}")
             return ""
 
-    def index_models(self, models_dir: Path) -> FAISS:
+    def index_models(self, models_dir: Path):
         """Indexa todos os memoriais-modelo de um diretório.
         
         Args:
             models_dir: Diretório com DOC/DOCX
             
         Returns:
-            Vectorstore FAISS indexado
+            Vectorstore FAISS indexado ou None
         """
+        if not LANGCHAIN_AVAILABLE:
+            logger.warning("LangChain não está disponível. Indexação desabilitada.")
+            return None
+        
         from memorial_maker.utils.io_paths import list_models
         
         model_paths = list_models(models_dir)

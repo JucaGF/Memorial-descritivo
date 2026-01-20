@@ -5,11 +5,19 @@ import json
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
-from langchain_openai import ChatOpenAI
-from langchain_core.messages import HumanMessage, SystemMessage
+try:
+    from langchain_openai import ChatOpenAI
+    from langchain_core.messages import HumanMessage, SystemMessage
+    LANGCHAIN_AVAILABLE = True
+except ImportError:
+    LANGCHAIN_AVAILABLE = False
+    ChatOpenAI = None
+    HumanMessage = None
+    SystemMessage = None
 
 from memorial_maker.config import settings
 from memorial_maker.rag.index_style import StyleIndexer
+from memorial_maker.rag.static_templates import StaticTemplateLoader, STATIC_TEMPLATES
 from memorial_maker.utils.logging import get_logger
 
 logger = get_logger("rag.generate")
@@ -18,38 +26,61 @@ logger = get_logger("rag.generate")
 class SectionGenerator:
     """Gerador de seções do memorial."""
 
-    def __init__(self, style_indexer: StyleIndexer, prompts_dir: Path):
+    def __init__(self, style_indexer: StyleIndexer, prompts_dir: Path, memorial_type: str = "telecom"):
         """Inicializa gerador.
         
         Args:
             style_indexer: Indexador de estilo
             prompts_dir: Diretório com prompts
+            memorial_type: Tipo de memorial ("telecom" ou "eletrico")
         """
         self.style_indexer = style_indexer
         self.prompts_dir = prompts_dir
+        self.memorial_type = memorial_type
+        
+        # Initialize static template loader for electrical memorials
+        if memorial_type == "eletrico":
+            templates_dir = prompts_dir / "eletrico" / "static_templates"
+            self.static_loader = StaticTemplateLoader(templates_dir)
+        else:
+            self.static_loader = None
         
         # Configura LLM (GPT-5 não suporta top_p)
-        llm_params = {
-            "model": settings.llm_model,
-            "temperature": settings.llm_temperature,
-            "max_tokens": settings.llm_max_tokens,
-            "openai_api_key": settings.openai_api_key,
-        }
-        
-        # Adiciona top_p apenas para modelos que suportam (não GPT-5)
-        if not settings.llm_model.startswith("gpt-5"):
-            llm_params["top_p"] = settings.llm_top_p
-        
-        self.llm = ChatOpenAI(**llm_params)
+        if not LANGCHAIN_AVAILABLE:
+            self.llm = None
+            logger.warning("LangChain não disponível. Geração de seções desabilitada.")
+        else:
+            llm_params = {
+                "model": settings.llm_model,
+                "temperature": settings.llm_temperature,
+                "max_tokens": settings.llm_max_tokens,
+                "openai_api_key": settings.openai_api_key,
+            }
+            
+            # Adiciona top_p apenas para modelos que suportam (não GPT-5)
+            if not settings.llm_model.startswith("gpt-5"):
+                llm_params["top_p"] = settings.llm_top_p
+            
+            self.llm = ChatOpenAI(**llm_params)
         
         # Carrega instruções base
         self.base_instructions = self._load_prompt("base_instructions.txt")
     
     def _load_prompt(self, filename: str) -> str:
         """Carrega arquivo de prompt."""
-        path = self.prompts_dir / filename
+        # For electrical memorials, check eletrico/ subdirectory first
+        if self.memorial_type == "eletrico":
+            eletrico_path = self.prompts_dir / "eletrico" / filename
+            if eletrico_path.exists():
+                path = eletrico_path
+            else:
+                # Fallback to base directory
+                path = self.prompts_dir / filename
+        else:
+            path = self.prompts_dir / filename
+        
         if not path.exists():
-            logger.warning(f"Prompt não encontrado: {filename}")
+            logger.warning(f"Prompt não encontrado: {filename} (tipo: {self.memorial_type})")
             return ""
         
         with open(path, "r", encoding="utf-8") as f:
@@ -193,7 +224,277 @@ class SectionGenerator:
                 "cat6_presente": any("cat6" in i.get("cabos", []) for i in itens),
             }
         
+        # Electrical sections
+        elif self.memorial_type == "eletrico":
+            return self._filter_context_for_electrical_section(section, master_data)
+        
         return {}
+
+    def _filter_context_for_electrical_section(
+        self,
+        section: str,
+        master_data: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """Filtra dados relevantes para seções elétricas."""
+        obra = master_data.get("obra", {})
+        itens = master_data.get("itens", [])
+        pavimentos = master_data.get("pavimentos", [])
+        
+        base_ctx = {
+            "empreendimento": obra.get("empreendimento", ""),
+            "construtora": obra.get("construtora", ""),
+            "endereco": obra.get("endereco", ""),
+            "pavimentos": pavimentos,
+        }
+        
+        # Extract electrical-specific data from extractions
+        extractions = master_data.get("extractions", [])
+        full_text_parts = []
+        for extraction in extractions:
+            if isinstance(extraction, dict):
+                text_items = extraction.get("text", [])
+                for text_item in text_items:
+                    if isinstance(text_item, dict):
+                        full_text_parts.append(text_item.get("text", ""))
+                    else:
+                        full_text_parts.append(str(text_item))
+        
+        full_text = "\n".join(full_text_parts) if full_text_parts else ""
+        
+        # Detect systems from text patterns
+        entrada_energia = any(
+            kw in full_text.lower() for kw in ["entrada", "fornecimento", "concessionária", "medidor"]
+        )
+        luz_forca = any(
+            kw in full_text.lower() for kw in ["iluminação", "luz", "força", "tomada", "circuito"]
+        )
+        luz_essencial = any(
+            kw in full_text.lower() for kw in ["essencial", "emergência", "gerador", "subestação"]
+        )
+        protecao_aterramento = any(
+            kw in full_text.lower() for kw in ["aterramento", "proteção", "dr", "disjuntor"]
+        )
+        
+        # Material detection
+        eletrodutos = any(
+            kw in full_text.lower() for kw in ["eletroduto", "conduíte", "calha"]
+        )
+        fios_cabos = any(
+            kw in full_text.lower() for kw in ["fio", "cabo", "condutor", "mm²"]
+        )
+        luminarias = any(
+            kw in full_text.lower() for kw in ["luminária", "lâmpada", "lampada", "reator"]
+        )
+        quadros = any(
+            kw in full_text.lower() for kw in ["quadro", "disjuntor", "dr", "qgf", "qdl"]
+        )
+        
+        if section == "s1_sumario":
+            return {
+                **base_ctx,
+                "sections_presentes": master_data.get("structured_extraction", {}).get("sections_present", []),
+            }
+        elif section == "s2_memorial_descritivo":
+            return {
+                **base_ctx,
+                "sistemas_presentes": master_data.get("structured_extraction", {}).get("systems_present", []),
+            }
+        elif section == "s2_1_introducao":
+            return {
+                **base_ctx,
+                "sistemas_presentes": master_data.get("structured_extraction", {}).get("systems_present", []),
+            }
+        elif section == "s2_2_generalidades":
+            return {
+                **base_ctx,
+                "normas_aplicaveis": ["NBR 5410", "NBR 14039"],
+                "caracteristicas_projeto": master_data.get("structured_extraction", {}).get("project_characteristics", {}),
+            }
+        elif section == "s2_3_descricao_servicos":
+            return {
+                **base_ctx,
+                "sistemas_presentes": master_data.get("structured_extraction", {}).get("systems_present", []),
+            }
+        elif section == "s2_3_1_entrada_energia":
+            return {
+                **base_ctx,
+                "entrada_energia": {
+                    "presente": entrada_energia,
+                    "dados": master_data.get("structured_extraction", {}).get("utility_entrance", {}),
+                },
+            }
+        elif section == "s2_3_2_luz_forca":
+            return {
+                **base_ctx,
+                "luz_forca": {
+                    "presente": luz_forca,
+                    "dados": master_data.get("structured_extraction", {}).get("lighting_power", {}),
+                },
+            }
+        elif section == "s2_3_3_luz_essencial":
+            return {
+                **base_ctx,
+                "luz_essencial": {
+                    "presente": luz_essencial,
+                    "dados": master_data.get("structured_extraction", {}).get("substation_essential", {}),
+                },
+            }
+        elif section == "s2_3_4_protecao_aterramento":
+            return {
+                **base_ctx,
+                "protecao_aterramento": {
+                    "presente": protecao_aterramento,
+                    "dados": master_data.get("structured_extraction", {}).get("grounding_protection", {}),
+                },
+            }
+        elif section == "s2_3_5_montagem_aparelhos":
+            return {
+                **base_ctx,
+                "montagem_aparelhos": master_data.get("structured_extraction", {}).get("appliances", {}),
+            }
+        elif section == "s3_especificacao_materiais":
+            return {
+                **base_ctx,
+                "materiais_presentes": master_data.get("structured_extraction", {}).get("materials_present", []),
+            }
+        elif section == "s3_1_introducao_materiais":
+            return {
+                **base_ctx,
+                "materiais_presentes": master_data.get("structured_extraction", {}).get("materials_present", []),
+            }
+        elif section == "s3_2_instalacoes_eletricas":
+            return {
+                **base_ctx,
+                "materiais_presentes": master_data.get("structured_extraction", {}).get("materials_present", []),
+            }
+        elif section == "s3_2_1_eletrodutos":
+            return {
+                **base_ctx,
+                "eletrodutos": {
+                    "presente": eletrodutos,
+                    "dados": master_data.get("structured_extraction", {}).get("conduits", {}),
+                },
+            }
+        elif section == "s3_2_2_fios_cabos":
+            return {
+                **base_ctx,
+                "fios_cabos": {
+                    "presente": fios_cabos,
+                    "dados": master_data.get("structured_extraction", {}).get("wires_cables", {}),
+                },
+            }
+        elif section == "s3_2_3_luminarias":
+            return {
+                **base_ctx,
+                "luminarias": {
+                    "presente": luminarias,
+                    "dados": master_data.get("structured_extraction", {}).get("luminaires", {}),
+                },
+            }
+        elif section == "s3_2_4_quadros":
+            return {
+                **base_ctx,
+                "quadros": {
+                    "presente": quadros,
+                    "dados": master_data.get("structured_extraction", {}).get("panels", {}),
+                },
+            }
+        
+        return base_ctx
+
+    async def _generate_structured_extraction_async(
+        self,
+        master_data: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """Stage 1: Generate structured extraction identifying electrical systems.
+        
+        Args:
+            master_data: JSON mestre consolidado
+            
+        Returns:
+            Structured JSON with identified systems and presence markers
+        """
+        logger.info("Stage 1: Generating structured extraction for electrical systems...")
+        
+        # Extract full text from master_data
+        full_text_parts = []
+        extractions = master_data.get("extractions", [])
+        for extraction in extractions:
+            if isinstance(extraction, dict):
+                text_items = extraction.get("text", [])
+                for text_item in text_items:
+                    if isinstance(text_item, dict):
+                        full_text_parts.append(text_item.get("text", ""))
+                    else:
+                        full_text_parts.append(str(text_item))
+        
+        full_text = "\n".join(full_text_parts) if full_text_parts else ""
+        
+        # Build context for structured extraction
+        obra = master_data.get("obra", {})
+        context = {
+            "empreendimento": obra.get("empreendimento", ""),
+            "construtora": obra.get("construtora", ""),
+            "extracted_text": full_text[:10000],  # Limit text length
+        }
+        
+        system_msg = SystemMessage(content="""Você é um analisador técnico especializado em projetos elétricos.
+Analise os dados extraídos e retorne APENAS um JSON válido identificando os sistemas elétricos presentes no projeto.
+
+Retorne um JSON com a seguinte estrutura:
+{
+  "utility_entrance": {"present": true/false, "details": {...}},
+  "lighting_power": {"present": true/false, "details": {...}},
+  "substation_essential": {"present": true/false, "details": {...}},
+  "grounding_protection": {"present": true/false, "details": {...}},
+  "project_characteristics": {...},
+  "materials_present": ["eletrodutos", "fios_cabos", "luminarias", "quadros"],
+  "sections_present": ["s2_3_1_entrada_energia", "s2_3_2_luz_forca", ...],
+  "uncertainty_markers": [...]
+}
+
+Seja conservador: marque como presente apenas se houver evidência clara nos dados extraídos.""")
+        
+        human_prompt = f"""
+Analise os seguintes dados extraídos de um projeto elétrico e identifique quais sistemas estão presentes:
+
+## DADOS EXTRAÍDOS:
+```json
+{json.dumps(context, ensure_ascii=False, indent=2)}
+```
+
+Retorne APENAS o JSON estruturado identificando os sistemas presentes. Não inclua texto adicional, apenas o JSON.
+"""
+        
+        human_msg = HumanMessage(content=human_prompt)
+        
+        try:
+            response = await self.llm.ainvoke([system_msg, human_msg])
+            content = response.content.strip()
+            
+            # Extract JSON from response (may have markdown code blocks)
+            if "```json" in content:
+                content = content.split("```json")[1].split("```")[0].strip()
+            elif "```" in content:
+                content = content.split("```")[1].split("```")[0].strip()
+            
+            structured = json.loads(content)
+            logger.info(f"Structured extraction completed: {len(structured.get('sections_present', []))} sections identified")
+            return structured
+            
+        except Exception as e:
+            logger.error(f"Error in structured extraction: {e}")
+            # Return conservative default (assume basic systems present)
+            return {
+                "utility_entrance": {"present": True},
+                "lighting_power": {"present": True},
+                "substation_essential": {"present": False},
+                "grounding_protection": {"present": True},
+                "project_characteristics": {},
+                "materials_present": ["eletrodutos", "fios_cabos", "luminarias", "quadros"],
+                "sections_present": ["s2_3_1_entrada_energia", "s2_3_2_luz_forca", "s2_3_4_protecao_aterramento"],
+                "uncertainty_markers": [],
+            }
 
     async def _generate_section_async(
         self,
@@ -204,6 +505,17 @@ class SectionGenerator:
         logger.info(f"Gerando seção: {section_id}")
         
         try:
+            # For electrical memorials, check if there's a static template first
+            if self.memorial_type == "eletrico" and self.static_loader:
+                # Check if section has a static template
+                template_name = STATIC_TEMPLATES.get(section_id)
+                if template_name and self.static_loader.has_template(template_name):
+                    logger.info(f"Usando template estático para {section_id}: {template_name}")
+                    static_content = self.static_loader.load_template(template_name)
+                    if static_content:
+                        return {"section_id": section_id, "content": static_content}
+            
+            # No static template, proceed with LLM generation
             # Carrega prompt específico
             section_prompt = self._load_prompt(f"{section_id}.txt")
             if not section_prompt:
@@ -264,22 +576,68 @@ Gere agora o texto da seção em PT-BR técnico, seguindo as regras.
         Returns:
             Dicionário {section_id: content}
         """
-        logger.info("Gerando todas as seções em paralelo...")
+        logger.info(f"Gerando todas as seções em paralelo (tipo: {self.memorial_type})...")
         
-        sections_ids = [
-            "s1_introducao",
-            "s2_dados_obra",
-            "s3_normas",
-            "s4_servicos",
-            "s4_1_voz",
-            "s4_2_dados",
-            "s4_3_video",
-            "s4_4_intercom",
-            "s4_5_monitoramento",
-            "s5_sala_monitoramento",
-            "s6_passivos_ativos",
-            "s7_testes_aceitacao",
-        ]
+        # For electrical memorials, use two-stage approach
+        if self.memorial_type == "eletrico":
+            # Stage 1: Structured extraction
+            structured_extraction = await self._generate_structured_extraction_async(master_data)
+            
+            # Add structured extraction to master_data for context filtering
+            master_data["structured_extraction"] = structured_extraction
+            
+            # Determine which sections to generate based on structured extraction
+            sections_present = structured_extraction.get("sections_present", [])
+            
+            # Base sections that are always included
+            base_sections = [
+                "s1_sumario",
+                "s2_memorial_descritivo",
+                "s2_1_introducao",
+                "s2_2_generalidades",
+                "s2_3_descricao_servicos",
+                "s3_especificacao_materiais",
+                "s3_1_introducao_materiais",
+                "s3_2_instalacoes_eletricas",
+            ]
+            
+            # Add sections based on presence
+            optional_sections = [
+                "s2_3_1_entrada_energia",
+                "s2_3_2_luz_forca",
+                "s2_3_3_luz_essencial",
+                "s2_3_4_protecao_aterramento",
+                "s2_3_5_montagem_aparelhos",
+                "s3_2_1_eletrodutos",
+                "s3_2_2_fios_cabos",
+                "s3_2_3_luminarias",
+                "s3_2_4_quadros",
+            ]
+            
+            # Build final section list (only include sections with evidence)
+            sections_ids = base_sections.copy()
+            for section_id in optional_sections:
+                if section_id in sections_present:
+                    sections_ids.append(section_id)
+            
+            logger.info(f"Generating {len(sections_ids)} sections for electrical memorial")
+            
+        else:
+            # Telecom memorials: use existing section list
+            sections_ids = [
+                "s1_introducao",
+                "s2_dados_obra",
+                "s3_normas",
+                "s4_servicos",
+                "s4_1_voz",
+                "s4_2_dados",
+                "s4_3_video",
+                "s4_4_intercom",
+                "s4_5_monitoramento",
+                "s5_sala_monitoramento",
+                "s6_passivos_ativos",
+                "s7_testes_aceitacao",
+            ]
         
         try:
             # Executa em paralelo
@@ -289,7 +647,7 @@ Gere agora o texto da seção em PT-BR técnico, seguindo as regras.
             ]
             results = await asyncio.gather(*tasks, return_exceptions=True)
             
-            # Organiza resultados
+            # Organiza resultados (only include non-empty sections)
             sections = {}
             for result in results:
                 if isinstance(result, Exception):
@@ -297,11 +655,14 @@ Gere agora o texto da seção em PT-BR técnico, seguindo as regras.
                     continue
                 
                 section_id = result.get("section_id")
-                content = result.get("content", "")
-                if content:
+                content = result.get("content", "").strip()
+                # Only include sections with actual content
+                if content and len(content) > 50:  # Minimum content length
                     sections[section_id] = content
+                else:
+                    logger.debug(f"Omitting empty section: {section_id}")
             
-            logger.info(f"Geradas {len(sections)} seções com sucesso")
+            logger.info(f"Geradas {len(sections)} seções com sucesso (tipo: {self.memorial_type})")
             return sections
             
         except Exception as e:
@@ -349,21 +710,50 @@ Gere agora o texto da seção em PT-BR técnico, seguindo as regras.
                 # Força sequencial
                 settings.parallel_execution = False
         
-        # Sequencial
-        sections_ids = [
-            "s1_introducao",
-            "s2_dados_obra",
-            "s3_normas",
-            "s4_servicos",
-            "s4_1_voz",
-            "s4_2_dados",
-            "s4_3_video",
-            "s4_4_intercom",
-            "s4_5_monitoramento",
-            "s5_sala_monitoramento",
-            "s6_passivos_ativos",
-            "s7_testes_aceitacao",
-        ]
+        # Sequencial - determine sections based on memorial type
+        if self.memorial_type == "eletrico":
+            # For electrical, we need structured extraction first
+            structured_extraction = asyncio.run(self._generate_structured_extraction_async(master_data))
+            master_data["structured_extraction"] = structured_extraction
+            
+            sections_present = structured_extraction.get("sections_present", [])
+            base_sections = [
+                "s1_sumario",
+                "s2_memorial_descritivo",
+                "s2_1_introducao",
+                "s2_2_generalidades",
+                "s2_3_descricao_servicos",
+                "s3_especificacao_materiais",
+                "s3_1_introducao_materiais",
+                "s3_2_instalacoes_eletricas",
+            ]
+            optional_sections = [
+                "s2_3_1_entrada_energia",
+                "s2_3_2_luz_forca",
+                "s2_3_3_luz_essencial",
+                "s2_3_4_protecao_aterramento",
+                "s2_3_5_montagem_aparelhos",
+                "s3_2_1_eletrodutos",
+                "s3_2_2_fios_cabos",
+                "s3_2_3_luminarias",
+                "s3_2_4_quadros",
+            ]
+            sections_ids = base_sections + [s for s in optional_sections if s in sections_present]
+        else:
+            sections_ids = [
+                "s1_introducao",
+                "s2_dados_obra",
+                "s3_normas",
+                "s4_servicos",
+                "s4_1_voz",
+                "s4_2_dados",
+                "s4_3_video",
+                "s4_4_intercom",
+                "s4_5_monitoramento",
+                "s5_sala_monitoramento",
+                "s6_passivos_ativos",
+                "s7_testes_aceitacao",
+            ]
         
         return asyncio.run(self._generate_sequential(sections_ids, master_data))
 

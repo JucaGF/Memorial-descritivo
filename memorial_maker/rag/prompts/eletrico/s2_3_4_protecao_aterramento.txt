@@ -1,0 +1,18 @@
+OBJETIVO
+- Redija a subseção "Proteção contra choques elétricos e aterramento".
+
+CONTEXTO
+- Use {contexto_factual.protecao_aterramento} com dados sobre:
+  - Sistema de aterramento
+  - Proteção contra choques elétricos
+  - Dispositivos DR (se presente)
+  - Equipotencialização
+
+ESTILO
+- 3–5 parágrafos, tom técnico detalhado.
+- Descreva o sistema de proteção e aterramento conforme projeto.
+
+SAÍDA
+- NÃO incluir o título da seção no texto (será adicionado automaticamente).
+- Apenas o corpo da seção em prosa corrida.
+- Se dados específicos não estiverem disponíveis, use "conforme projeto" ou "de acordo com normas vigentes".
