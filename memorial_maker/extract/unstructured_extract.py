@@ -4,8 +4,14 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 import json
 
-from unstructured.partition.pdf import partition_pdf
-from unstructured.staging.base import elements_to_json
+try:
+    from unstructured.partition.pdf import partition_pdf
+    from unstructured.staging.base import elements_to_json
+    UNSTRUCTURED_AVAILABLE = True
+except ImportError:
+    UNSTRUCTURED_AVAILABLE = False
+    partition_pdf = None
+    elements_to_json = None
 
 from memorial_maker.config import settings
 from memorial_maker.utils.logging import get_logger
@@ -171,6 +177,13 @@ def extract_pdf_unstructured(
     Returns:
         Dicionário com dados extraídos estruturados
     """
+    if not UNSTRUCTURED_AVAILABLE:
+        raise ImportError(
+            "Unstructured.io não está instalado ou não pôde ser carregado. "
+            "Esta é uma dependência CRÍTICA para o funcionamento do Memorial Maker. "
+            "Execute: pip install unstructured[pdf]"
+        )
+    
     logger.info(f"Extraindo com Unstructured: {pdf_path.name}")
     
     try:
@@ -246,37 +259,44 @@ def extract_pdf_unstructured(
         
     except Exception as e:
         logger.error(f"Erro ao extrair {pdf_path.name}: {e}")
-        return {
-            "filename": pdf_path.name,
-            "error": str(e),
-            "total_elements": 0,
-            "text": [],
-            "tables": [],
-            "metadata": {},
-        }
+        raise e
 
 
 def extract_all_pdfs(
     pdf_dir: Path,
     output_dir: Path,
+    memorial_type: str = "telecom",
+    progress_callback: Optional[callable] = None,
 ) -> List[Dict[str, Any]]:
     """Extrai conteúdo de todos os PDFs de um diretório.
     
     Args:
         pdf_dir: Diretório com PDFs
         output_dir: Diretório de saída
+        memorial_type: Tipo de memorial ("telecom" ou "eletrico")
+        progress_callback: Função opcional para reportar progresso (current, total)
         
     Returns:
         Lista de resultados de extração
     """
+    # Ambos os tipos (telecom e elétrico) usam a mesma extração sequencial confiável
+    # A extração paralela estava causando travamentos, então desabilitamos por enquanto
+    
     pdf_files = list(pdf_dir.glob("*.pdf"))
     logger.info(f"Encontrados {len(pdf_files)} PDFs em {pdf_dir}")
     
     results = []
+    total_files = len(pdf_files)
     
-    for pdf_path in pdf_files:
+    for i, pdf_path in enumerate(pdf_files, 1):
         result = extract_pdf_unstructured(pdf_path, output_dir)
         results.append(result)
+        
+        if progress_callback:
+            try:
+                progress_callback(i, total_files)
+            except Exception as e:
+                logger.error(f"Error in progress callback: {e}")
     
     # Salva JSON consolidado
     consolidated_json = output_dir / "all_extractions.json"

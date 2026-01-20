@@ -1,13 +1,20 @@
 """Interface Streamlit para Memorial Maker."""
 
-import streamlit as st
+import sys
 from pathlib import Path
+
+# Adiciona o diretório raiz ao PYTHONPATH
+project_root = Path(__file__).parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+import streamlit as st
 import tempfile
 import shutil
 import uuid
 from datetime import datetime
 
-from memorial_maker.config import settings
+from memorial_maker.config import settings, MemorialType
 from memorial_maker.utils.io_paths import setup_output_dirs, get_project_name
 from memorial_maker.extract.unstructured_extract import extract_all_pdfs, extract_text_from_elements
 from memorial_maker.normalize.canonical_map import ItemExtractor, normalize_all_items
@@ -59,12 +66,28 @@ def main():
     
     # Cabeçalho
     st.title("📄 Memorial Maker")
-    st.markdown("**Geração automática de Memorial Descritivo de Telecomunicações**")
+    
+    # Memorial type selector
+    memorial_type_display = st.selectbox(
+        "Tipo de Memorial",
+        ["Telecomunicações", "Elétrico"],
+        key="memorial_type_display",
+        index=0,
+    )
+    
+    # Map display name to internal type
+    memorial_type = MemorialType.ELECTRICAL if memorial_type_display == "Elétrico" else MemorialType.TELECOM
+    
+    # Update title based on type
+    if memorial_type == MemorialType.ELECTRICAL:
+        st.markdown("**Geração automática de Memorial Descritivo Elétrico**")
+    else:
+        st.markdown("**Geração automática de Memorial Descritivo de Telecomunicações**")
+    
     st.markdown("---")
     
     # Upload de arquivos
-    st.header("📤 1. Upload de Arquivos")
-    
+    st.header("📤 1. Upload de Arquivos")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
     col1, col2 = st.columns(2)
     
     with col1:
@@ -106,16 +129,47 @@ def main():
         st.error("❌ Configure sua OpenAI API Key no arquivo .env")
         return
     
-    if st.button("🎯 Gerar Memorial Descritivo", type="primary", use_container_width=True):
-        generate_memorial(pdf_files, model_files, settings.parallel_execution)
+    # Verifica dependências críticas
+    unstructured_error = False
+    try:
+        from memorial_maker.extract.unstructured_extract import UNSTRUCTURED_AVAILABLE
+        if not UNSTRUCTURED_AVAILABLE:
+            st.error("❌ **ERRO CRÍTICO**: Unstructured.io não está instalado. A extração de PDFs é impossível sem esta dependência. "
+                     "Por favor, execute: `pip install unstructured[pdf]`")
+            unstructured_error = True
+    except Exception as e:
+        st.error(f"❌ **ERRO CRÍTICO**: Falha ao carregar Unstructured: {e}")
+        unstructured_error = True
+    
+    langchain_error = False
+    try:
+        from memorial_maker.rag.generate_sections import LANGCHAIN_AVAILABLE
+        if not LANGCHAIN_AVAILABLE:
+            st.warning("⚠️ **AVISO**: LangChain não está instalado. A geração de seções não funcionará.")
+            langchain_error = True
+    except:
+        pass
+    
+    if unstructured_error:
+        st.button("🎯 Gerar Memorial Descritivo", type="primary", use_container_width=True, disabled=True, 
+                  help="Instale o Unstructured para habilitar esta função")
+    elif st.button("🎯 Gerar Memorial Descritivo", type="primary", use_container_width=True):
+        generate_memorial(pdf_files, model_files, settings.parallel_execution, memorial_type.value)
     
     # Resultados
     if st.session_state.generated:
         show_results()
 
 
-def generate_memorial(pdf_files, model_files, parallel):
-    """Executa pipeline de geração."""
+def generate_memorial(pdf_files, model_files, parallel, memorial_type: str = "telecom"):
+    """Executa pipeline de geração.
+    
+    Args:
+        pdf_files: Lista de arquivos PDF
+        model_files: Lista de arquivos modelo (opcional)
+        parallel: Se True, executa em paralelo
+        memorial_type: Tipo de memorial ("telecom" ou "eletrico")
+    """
     
     # Diretório temporário da sessão
     runtime_dir = Path(tempfile.gettempdir()) / "memorial_maker" / st.session_state.session_id
@@ -153,8 +207,20 @@ def generate_memorial(pdf_files, model_files, parallel):
             
             # 1. Extração com Unstructured
             status_text.text("📄 Extraindo dados dos PDFs com Unstructured...")
-            extractions = extract_all_pdfs(pdf_dir, dirs["extraido"])
-            progress_bar.progress(30)
+            
+            def update_extraction_progress(current, total):
+                status_text.text(f"📄 Extraindo PDF {current}/{total}...")
+                # Map 0-100% of extraction to 10-40% of overall progress
+                progress = 10 + int((current / total) * 30)
+                progress_bar.progress(progress)
+                
+            extractions = extract_all_pdfs(
+                pdf_dir, 
+                dirs["extraido"], 
+                memorial_type=memorial_type,
+                progress_callback=update_extraction_progress
+            )
+            progress_bar.progress(40)
             
             # 2. Normalização
             status_text.text("🔧 Normalizando dados...")
@@ -190,6 +256,8 @@ def generate_memorial(pdf_files, model_files, parallel):
                 normalized_items,
                 dirs["extraido"],
             )
+            # Add extractions to master_data for electrical structured extraction
+            master_data["extractions"] = extractions
             progress_bar.progress(55)
             
             # 4. Indexação
@@ -209,7 +277,7 @@ def generate_memorial(pdf_files, model_files, parallel):
             # 5. Geração de seções
             status_text.text("✍️ Gerando seções com LLM...")
             prompts_dir = Path(__file__).parent.parent / "memorial_maker" / "rag" / "prompts"
-            generator = SectionGenerator(style_indexer, prompts_dir)
+            generator = SectionGenerator(style_indexer, prompts_dir, memorial_type=memorial_type)
             
             sections = generator.generate_all_sections(master_data, parallel=parallel)
             progress_bar.progress(85)
@@ -222,6 +290,7 @@ def generate_memorial(pdf_files, model_files, parallel):
                 dirs["memorial"],
                 logo_path=logo_path,
                 project_name=project_name,
+                memorial_type=memorial_type,
             )
             progress_bar.progress(100)
             

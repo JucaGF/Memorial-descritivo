@@ -1,0 +1,13 @@
+OBJETIVO
+- Redija a subseção "Introdução" dentro da Especificação dos Materiais.
+
+CONTEXTO
+- Use {contexto_factual.materiais_presentes} para mencionar as categorias de materiais.
+
+ESTILO
+- 1–2 parágrafos, tom técnico.
+- Contextualize a especificação de materiais.
+
+SAÍDA
+- NÃO incluir o título da seção no texto (será adicionado automaticamente).
+- Apenas o corpo da seção em prosa corrida.

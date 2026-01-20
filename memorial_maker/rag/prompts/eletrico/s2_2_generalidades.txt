@@ -1,0 +1,13 @@
+OBJETIVO
+- Redija a subseção "Generalidades" com informações gerais sobre o projeto elétrico.
+
+CONTEXTO
+- Use {contexto_factual.normas_aplicaveis} e {contexto_factual.caracteristicas_projeto}.
+
+ESTILO
+- 2–3 parágrafos, tom técnico.
+- Descreva normas técnicas aplicáveis, características gerais da instalação, tipo de fornecimento.
+
+SAÍDA
+- NÃO incluir o título da seção no texto (será adicionado automaticamente).
+- Apenas o corpo da seção em prosa corrida.

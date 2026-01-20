@@ -1,0 +1,24 @@
+• Emprego de ferramentas apropriadas para cada tipo de trabalho.
+• Os eletrodutos serão cortados por serra, e as bordas aparadas com lima para remoção de rebarbas.
+• O raio mínimo de curvatura dos tubos não deve ser superior a 6 (seis) vezes o diâmetro do mesmo.
+• Durante a concretagem, todas as pontas de tubos expostas deverão ser fechadas por meio de caps galvanizados.
+• As ligações dos eletrodutos às caixas deverão ser feitas por meio de buchas e arruelas galvanizadas.
+• A enfiação será feita somente após o revestimento com massa fina, azulejos e ladrilhos.
+• Antes da enfiação, as tubulações deverão ser convenientemente limpas. Nas tubulações secas, deverão ser deixados arames guia galvanizados a fogo, a fim de facilitar futuras enfiações.
+• Todas as caixas e quadros nas alvenarias deverão ser chumbados com argamassa.
+• Todas as emendas dos fios deverão ser isoladas e convenientemente soldadas. Os cabos com secção superior a 6 mm² deverão ter emendas por meio de conectores apropriados.
+• Em hipótese alguma serão permitidas emendas de condutores dentro de eletrodutos.
+• Deverá ser feito teste de isolação em todos os circuitos, com obtenção de resultados conforme a tabela 81 da NBR 5410 da ABNT.
+• Todos os cabos verticais deverão ser fixos em caixas de passagem ou perfilados por meio de braçadeiras, sendo no mínimo duas fixações por pavimento afim de diminuir a tensão mecânica nos mesmos, devido ao peso próprio.
+• Os eletrodutos serão instalados, quando na posição horizontal, com leve declínio no sentido das caixas, para efeitos de evitar acúmulos de água condensada.
+• Todas as caixas de madeira e fundos devem ser pintadas com duas mãos de verniz isolante.
+• A firma instaladora se encarregará de efetuar os pedidos de ligações, aprovações e inspeções que se fizerem necessários, devendo antes da execução dos serviços consultar as respectivas concessionárias.
+• As instalações a serem executadas na forma do presente memorial, deverão ser garantidas pela firma instaladora quanto à qualidade do material empregado, e ainda quanto à conformidade das exigências em vigor, nesta data, imposta pelas repartições e companhias concessionárias com jurisdição sobre as referidas instalações.
+• A firma instaladora deverá substituir por sua conta, qualquer material ou aparelho de seu fornecimento que, durante o prazo de 1 (um) ano, a contar da entrega definitiva da obra, apresentar defeitos decorrentes de fabricação ou da instalação dos mesmos, neste caso a garantia do material ou do aparelho de fornecimento da proponente eventualmente substituído passará a contar da data de substituição do mesmo. Ficam ressalvados, entretanto, os casos em que os defeitos verificados provenham do uso impróprio das instalações ou do desgaste natural dos materiais.
+• Baseado no Edital do Confea e na Lei Federal n. 5194, as firmas devem possuir como sócio ou funcionário devidamente registrado, um engenheiro eletricista, legalmente registrado no CREA. Portanto, o proponente deverá se enquadrar no citado.
+• O proponente deverá apresentar a inscrição no INSS. No preço apresentado, deverão ser previstas todas as leis sociais e trabalhistas em vigor.
+• O proponente em hipótese alguma poderá subempreitar parte ou todo o trabalho, sem e cumprimento das leis sociais, obrigando-se a verificar se a sublocadora está inscrita no INSS.
+• Todos os quadros de energia elétrica deverão ter os seus projetos executivos fornecidos pelo fabricante enviados com consentimento por escrito do Engenheiro Fiscal. Este consentimento não eximirá o contrato de responsabilidades técnicas à fiscalização da OBRA para aprovação prévia.
+• Todos os funcionários da empresa contratada para execução dos serviços, deverão possuir identificação através de crachás, onde contenha os seguintes dados: nome, número de RG, cargo ocupado, número da carteira de trabalho e grupo sanguíneo.
+• Antes de qualquer desligamento de carga elétrica temporária ou por períodos definidos, deverão ser previamente notificados por escrito e liberado pela gerência da obra.
+• Qualquer alteração nos projetos elétricos deverá ser previamente informados e aprovados pelo engenheiro fiscal da Obra, antes de sua efetiva execução.

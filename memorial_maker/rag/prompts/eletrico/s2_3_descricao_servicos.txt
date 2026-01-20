@@ -1,0 +1,13 @@
+OBJETIVO
+- Redija a subseção "Descrição dos Serviços" que introduz as subseções específicas.
+
+CONTEXTO
+- Use {contexto_factual.sistemas_presentes} para mencionar os sistemas que serão detalhados.
+
+ESTILO
+- 1–2 parágrafos, tom técnico.
+- Introduza as subseções que seguem (entrada de energia, luz e força, etc.).
+
+SAÍDA
+- NÃO incluir o título da seção no texto (será adicionado automaticamente).
+- Apenas o corpo da seção em prosa corrida.

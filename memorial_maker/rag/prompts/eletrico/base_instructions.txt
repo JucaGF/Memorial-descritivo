@@ -1,0 +1,15 @@
+Você escreverá um Memorial Descritivo Elétrico em PT-BR técnico.
+
+REGRAS GERAIS
+- Use APENAS o conteúdo de {contexto_factual} para fatos (quantidades, itens, pavimentos, componentes elétricos, especificações técnicas).
+- OS MODELOS servem SOMENTE para estilo, ordem, títulos, linguagem e encadeamento (NUNCA use seus números como fatos).
+- Se um dado não existir no {contexto_factual}, OMITA a seção inteira. NÃO mencione que está ausente.
+- Estrutura dinâmica: inclua APENAS seções para sistemas presentes no projeto.
+- Formatação: PT-BR, vírgula decimal (ex.: 1,40 m); tensões em V (ex.: 220V); correntes em A (ex.: 20A).
+- Tom: claro, objetivo, técnico, igual ao estilo dos memoriais-modelo.
+
+SAÍDA
+- Prosa corrida (sem listas desnecessárias), exceto quando o estilo dos modelos pedir listas.
+- Não invente valores numéricos ou especificações técnicas.
+- Quando valores específicos estão ausentes, use frases genéricas mas corretas tecnicamente (ex.: "conforme projeto", "de acordo com normas vigentes").
+- Seja conciso mas completo. Mantenha o nível de detalhe adequado para um documento técnico profissional.

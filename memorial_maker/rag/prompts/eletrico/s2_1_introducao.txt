@@ -1,0 +1,15 @@
+OBJETIVO
+- Redija a subseção "Introdução" dentro do Memorial Descritivo.
+
+CONTEXTO
+- Use {contexto_factual.empreendimento}, {contexto_factual.construtora}, {contexto_factual.endereco}.
+- Use {contexto_factual.sistemas_presentes} para mencionar os sistemas elétricos.
+
+ESTILO
+- 2–3 parágrafos, tom técnico.
+- Contextualize o escopo do sistema elétrico do empreendimento.
+- Mencione os principais sistemas contemplados.
+
+SAÍDA
+- NÃO incluir o título da seção no texto (será adicionado automaticamente).
+- Apenas o corpo da seção em prosa corrida.

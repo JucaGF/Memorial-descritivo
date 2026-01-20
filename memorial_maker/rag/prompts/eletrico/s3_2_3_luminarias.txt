@@ -1,0 +1,18 @@
+OBJETIVO
+- Redija a subseção "Luminárias e acessórios".
+
+CONTEXTO
+- Use {contexto_factual.luminarias} com dados sobre:
+  - Tipos de luminárias
+  - Lâmpadas
+  - Reatores (se presente)
+  - Acessórios
+
+ESTILO
+- 2–4 parágrafos, tom técnico detalhado.
+- Descreva as luminárias e acessórios conforme projeto.
+
+SAÍDA
+- NÃO incluir o título da seção no texto (será adicionado automaticamente).
+- Apenas o corpo da seção em prosa corrida.
+- Se dados específicos não estiverem disponíveis, use "conforme projeto" ou "de acordo com normas vigentes".

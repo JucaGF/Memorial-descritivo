@@ -1,0 +1,33 @@
+OBJETIVO
+- Redija a seção "DADOS DA OBRA" com informações extraídas do projeto.
+
+CONTEXTO
+Este é uma seção COMPLETAMENTE VARIÁVEL baseada nos dados do projeto.
+
+Use os seguintes dados de {contexto_factual.obra}:
+- Construtora: {construtora}
+- Obra/Empreendimento: {empreendimento}
+- Localização/Endereço: {endereco} ou {localizacao}
+- Tipo de Edificação: {tipo_edificacao}
+- Tipologia: {tipologia} (descrição dos pavimentos)
+- Quantidade de apartamentos: {num_apartamentos}
+- Quantidade de lojas: {num_lojas} (ou "Sem lojas" se não houver)
+- Quantidade de restaurantes: {num_restaurantes} (ou "Sem restaurantes" se não houver)
+
+FORMATO DE SAÍDA
+A seção deve ser formatada como lista de bullets com cada item:
+• Construtora: [nome da construtora];
+• Obra: [nome do empreendimento];
+• Localização: [endereço completo];
+• Tipo de Edificação: [tipo];
+• Tipologia: [descrição dos pavimentos];
+• Quantidade de apartamentos: [número] Apartamentos;
+• Quantidade de lojas: [número ou "Sem lojas"];
+• Quantidade de restaurantes: [número ou "Sem restaurantes"].
+
+REGRAS
+- Use APENAS dados presentes em {contexto_factual.obra}
+- Se um dado não existir, use "Não especificado" ou omita
+- Mantenha o formato de lista exatamente como mostrado
+- Finalize cada item com ponto-e-vírgula (;) exceto o último que termina com ponto (.)
+- NÃO incluir o título da seção no texto (será adicionado automaticamente)
