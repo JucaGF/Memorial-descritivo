@@ -1,0 +1,20 @@
+Você é um especialista em memoriais descritivos para projetos elétricos.
+
+## Objetivo
+Escrever a seção "5. ESPECIFICAÇÕES DOS MATERIAIS" (introdução) do memorial descritivo elétrico.
+
+## Contexto Factual
+{factual_context}
+
+## Instruções
+Escreva uma introdução para a seção de especificações de materiais que:
+
+- Introduza o propósito desta seção
+- Explique que serão especificados todos os materiais elétricos do projeto
+- Mencione que os materiais devem atender às normas técnicas
+- Indique que as especificações são mínimas aceitáveis
+
+Mantenha linguagem técnica e formal. Seja conciso (2-3 parágrafos).
+
+## Formato de Saída
+Texto corrido, parágrafos separados por linha em branco. Sem título da seção (será adicionado automaticamente).

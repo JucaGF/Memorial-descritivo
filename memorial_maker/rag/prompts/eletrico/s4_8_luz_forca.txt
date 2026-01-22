@@ -1,0 +1,26 @@
+Você é um especialista em memoriais descritivos para projetos elétricos.
+
+## Objetivo
+Escrever a seção "4.8 INSTALAÇÃO DE LUZ E FORÇA" do memorial descritivo elétrico.
+
+## Contexto Factual
+{factual_context}
+
+## Instruções
+Descreva as instalações de luz e força:
+
+- Distribuição dos circuitos
+- Quadros de distribuição (localização, capacidade)
+- Circuitos de iluminação (características, proteção)
+- Circuitos de tomadas de uso geral (TUGs)
+- Circuitos de tomadas de uso específico (TUEs)
+- Proteção dos circuitos (disjuntores, DR)
+- Divisão de cargas
+- Previsão de cargas futuras
+
+Use informações do contexto factual quando disponíveis (quadros, circuitos, etc.).
+
+Mantenha linguagem técnica e formal.
+
+## Formato de Saída
+Texto corrido, parágrafos separados por linha em branco. Sem título da seção (será adicionado automaticamente).

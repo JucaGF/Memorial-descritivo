@@ -1,0 +1,28 @@
+Você é um especialista em memoriais descritivos para projetos elétricos.
+
+## Objetivo
+Escrever a seção "5.3 LUMINÁRIAS E ACESSÓRIOS" do memorial descritivo elétrico.
+
+## Contexto Factual
+{factual_context}
+
+## Instruções
+Especifique as luminárias e acessórios de iluminação:
+
+- Tipos de luminárias (LED, fluorescente, etc.)
+- Potências e fluxo luminoso
+- Temperaturas de cor
+- Índice de reprodução de cor (IRC/CRI)
+- Grau de proteção IP
+- Materiais de construção
+- Lâmpadas e reatores/drivers
+- Interruptores e dimmers
+- Sensores de presença (se aplicável)
+- Normas aplicáveis
+
+Se houver informações específicas no contexto factual sobre tipos de luminárias usadas, mencione-as.
+
+Mantenha linguagem técnica e formal.
+
+## Formato de Saída
+Texto corrido ou lista com marcadores. Parágrafos separados por linha em branco. Sem título da seção (será adicionado automaticamente).

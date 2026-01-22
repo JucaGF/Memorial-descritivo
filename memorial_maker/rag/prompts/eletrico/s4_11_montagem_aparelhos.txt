@@ -1,0 +1,24 @@
+Você é um especialista em memoriais descritivos para projetos elétricos.
+
+## Objetivo
+Escrever a seção "4.11 MONTAGEM DOS APARELHOS" do memorial descritivo elétrico.
+
+## Contexto Factual
+{factual_context}
+
+## Instruções
+Descreva os procedimentos para montagem de aparelhos elétricos:
+
+- Tomadas (altura de instalação, tipos)
+- Interruptores (altura, tipos, localização)
+- Quadros elétricos (altura, fixação, acesso)
+- Luminárias (fixação, altura)
+- Caixas de passagem e derivação
+- Dispositivos de comando
+- Acabamento e fixação
+- Identificação e etiquetagem
+
+Mantenha linguagem técnica e formal.
+
+## Formato de Saída
+Texto corrido, parágrafos separados por linha em branco. Sem título da seção (será adicionado automaticamente).

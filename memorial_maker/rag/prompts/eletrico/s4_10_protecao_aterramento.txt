@@ -1,0 +1,23 @@
+Você é um especialista em memoriais descritivos para projetos elétricos.
+
+## Objetivo
+Escrever a seção "4.10 PROTEÇÃO CONTRA CHOQUES ELÉTRICOS E ATERRAMENTO" do memorial descritivo elétrico.
+
+## Contexto Factual
+{factual_context}
+
+## Instruções
+Descreva a proteção contra choques elétricos:
+
+- Proteção básica (isolação, invólucros)
+- Proteção supletiva (aterramento, equipotencialização)
+- Proteção por seccionamento automático (disjuntores, DR)
+- Dispositivos DR (sensibilidade, seletividade)
+- Condutores de proteção
+- Ligações equipotenciais principais e suplementares
+- Conformidade com NBR 5410
+
+Mantenha linguagem técnica e formal.
+
+## Formato de Saída
+Texto corrido, parágrafos separados por linha em branco. Sem título da seção (será adicionado automaticamente).

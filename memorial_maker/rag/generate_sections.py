@@ -2,6 +2,7 @@
 
 import asyncio
 import json
+import logging
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
@@ -19,6 +20,12 @@ from memorial_maker.config import settings
 from memorial_maker.rag.index_style import StyleIndexer
 from memorial_maker.rag.static_templates import StaticTemplateLoader, STATIC_TEMPLATES
 from memorial_maker.utils.logging import get_logger
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 logger = get_logger("rag.generate")
 
@@ -68,21 +75,23 @@ class SectionGenerator:
     
     def _load_prompt(self, filename: str) -> str:
         """Carrega arquivo de prompt."""
-        # For electrical memorials, check eletrico/ subdirectory first
+        # Try memorial-specific directory first
         if self.memorial_type == "eletrico":
-            eletrico_path = self.prompts_dir / "eletrico" / filename
-            if eletrico_path.exists():
-                path = eletrico_path
-            else:
-                # Fallback to base directory
-                path = self.prompts_dir / filename
+            type_path = self.prompts_dir / "eletrico" / filename
+        else:  # telecom
+            type_path = self.prompts_dir / "telecom" / filename
+        
+        if type_path.exists():
+            path = type_path
         else:
+            # Fallback to base directory (e.g., base_instructions.txt)
             path = self.prompts_dir / filename
         
         if not path.exists():
             logger.warning(f"Prompt não encontrado: {filename} (tipo: {self.memorial_type})")
             return ""
         
+        logger.debug(f"Carregando prompt: {path}")
         with open(path, "r", encoding="utf-8") as f:
             return f.read()
 
@@ -485,6 +494,7 @@ Retorne APENAS o JSON estruturado identificando os sistemas presentes. Não incl
         except Exception as e:
             logger.error(f"Error in structured extraction: {e}")
             # Return conservative default (assume basic systems present)
+            logger.info("Using fallback structured extraction with all sections included")
             return {
                 "utility_entrance": {"present": True},
                 "lighting_power": {"present": True},
@@ -492,9 +502,23 @@ Retorne APENAS o JSON estruturado identificando os sistemas presentes. Não incl
                 "grounding_protection": {"present": True},
                 "project_characteristics": {},
                 "materials_present": ["eletrodutos", "fios_cabos", "luminarias", "quadros"],
-                "sections_present": ["s2_3_1_entrada_energia", "s2_3_2_luz_forca", "s2_3_4_protecao_aterramento"],
+                "sections_present": [
+                    # Section 4 subsections - always include the main ones
+                    "s4_1_entrada_energia",
+                    "s4_3_aterramento",
+                    "s4_4_eletrodutos_leitos",
+                    "s4_5_condutores",
+                    "s4_6_medicao_energia",
+                    "s4_7_cores",
+                    "s4_8_luz_forca",
+                    "s4_10_protecao_aterramento",
+                    "s4_11_montagem_aparelhos",
+                    "s4_12_itens_nao_inclusos",
+                    # s4_2 and s4_9 are conditional (substation/emergency)
+                ],
                 "uncertainty_markers": [],
             }
+
 
     async def _generate_section_async(
         self,
@@ -503,6 +527,7 @@ Retorne APENAS o JSON estruturado identificando os sistemas presentes. Não incl
     ) -> Dict[str, str]:
         """Gera uma seção de forma assíncrona."""
         logger.info(f"Gerando seção: {section_id}")
+        logger.debug(f"Memorial type: {self.memorial_type}")
         
         try:
             # For electrical memorials, check if there's a static template first
@@ -558,6 +583,7 @@ Gere agora o texto da seção em PT-BR técnico, seguindo as regras.
             content = response.content.strip()
             
             logger.info(f"Seção {section_id} gerada: {len(content)} chars")
+            logger.debug(f"Preview: {content[:100]}...")
             return {"section_id": section_id, "content": content}
             
         except Exception as e:
@@ -589,34 +615,43 @@ Gere agora o texto da seção em PT-BR técnico, seguindo as regras.
             # Determine which sections to generate based on structured extraction
             sections_present = structured_extraction.get("sections_present", [])
             
-            # Base sections that are always included
+            # Base sections that are always included (matching reference memorial structure)
             base_sections = [
-                "s1_sumario",
-                "s2_memorial_descritivo",
-                "s2_1_introducao",
-                "s2_2_generalidades",
-                "s2_3_descricao_servicos",
-                "s3_especificacao_materiais",
-                "s3_1_introducao_materiais",
-                "s3_2_instalacoes_eletricas",
+                "s0_sumario",  # Static TOC
+                "s1_introducao",  # Section 1
+                "s2_dados_obra",  # Section 2
+                "s3_requisitos_gerais",  # Section 3
+                "s3_1_disposicoes_gerais",  # 3.1
+                "s3_2_disposicoes_base_projeto",  # 3.2
+                "s4_visao_geral",  # Section 4 intro
+                "s5_especificacao_materiais",  # Section 5 intro
+                "s5_1_instalacoes_eletricas",  # 5.1
+                "s5_2_fios_cabos",  # 5.2
+                "s5_3_luminarias",  # 5.3
+                "s5_4_quadros",  # 5.4
             ]
             
-            # Add sections based on presence
-            optional_sections = [
-                "s2_3_1_entrada_energia",
-                "s2_3_2_luz_forca",
-                "s2_3_3_luz_essencial",
-                "s2_3_4_protecao_aterramento",
-                "s2_3_5_montagem_aparelhos",
-                "s3_2_1_eletrodutos",
-                "s3_2_2_fios_cabos",
-                "s3_2_3_luminarias",
-                "s3_2_4_quadros",
+            # Section 4 subsections that are conditional (only if evidence found)
+            optional_section4_subsections = [
+                "s4_1_entrada_energia",  # 4.1
+                "s4_2_subestacao",  # 4.2
+                "s4_2_1_dados_construtivos",  # 4.2.1
+                "s4_3_aterramento",  # 4.3
+                "s4_4_eletrodutos_leitos",  # 4.4
+                "s4_5_condutores",  # 4.5
+                "s4_6_medicao_energia",  # 4.6
+                "s4_7_cores",  # 4.7
+                "s4_8_luz_forca",  # 4.8
+                "s4_9_luz_essencial",  # 4.9
+                "s4_10_protecao_aterramento",  # 4.10
+                "s4_11_montagem_aparelhos",  # 4.11
+                "s4_12_itens_nao_inclusos",  # 4.12
             ]
             
-            # Build final section list (only include sections with evidence)
+            # Build final section list
             sections_ids = base_sections.copy()
-            for section_id in optional_sections:
+            # Add section 4 subsections based on evidence
+            for section_id in optional_section4_subsections:
                 if section_id in sections_present:
                     sections_ids.append(section_id)
             
@@ -661,8 +696,10 @@ Gere agora o texto da seção em PT-BR técnico, seguindo as regras.
                     sections[section_id] = content
                 else:
                     logger.debug(f"Omitting empty section: {section_id}")
+                    logger.debug(f"Content length: {len(content)}")
             
             logger.info(f"Geradas {len(sections)} seções com sucesso (tipo: {self.memorial_type})")
+            logger.info(f"Seções geradas: {list(sections.keys())}")
             return sections
             
         except Exception as e:
@@ -718,27 +755,39 @@ Gere agora o texto da seção em PT-BR técnico, seguindo as regras.
             
             sections_present = structured_extraction.get("sections_present", [])
             base_sections = [
-                "s1_sumario",
-                "s2_memorial_descritivo",
-                "s2_1_introducao",
-                "s2_2_generalidades",
-                "s2_3_descricao_servicos",
-                "s3_especificacao_materiais",
-                "s3_1_introducao_materiais",
-                "s3_2_instalacoes_eletricas",
+                "s0_sumario",
+                "s1_introducao",
+                "s2_dados_obra",
+                "s3_requisitos_gerais",
+                "s3_1_disposicoes_gerais",
+                "s3_2_disposicoes_base_projeto",
+                "s4_visao_geral",
+                "s5_especificacao_materiais",
+                "s5_1_instalacoes_eletricas",
+                "s5_2_fios_cabos",
+                "s5_3_luminarias",
+                "s5_4_quadros",
             ]
-            optional_sections = [
-                "s2_3_1_entrada_energia",
-                "s2_3_2_luz_forca",
-                "s2_3_3_luz_essencial",
-                "s2_3_4_protecao_aterramento",
-                "s2_3_5_montagem_aparelhos",
-                "s3_2_1_eletrodutos",
-                "s3_2_2_fios_cabos",
-                "s3_2_3_luminarias",
-                "s3_2_4_quadros",
+            
+            # Section 4 subsections that are conditional
+            optional_section4_subsections = [
+                "s4_1_entrada_energia",
+                "s4_2_subestacao",
+                "s4_2_1_dados_construtivos",
+                "s4_3_aterramento",
+                "s4_4_eletrodutos_leitos",
+                "s4_5_condutores",
+                "s4_6_medicao_energia",
+                "s4_7_cores",
+                "s4_8_luz_forca",
+                "s4_9_luz_essencial",
+                "s4_10_protecao_aterramento",
+                "s4_11_montagem_aparelhos",
+                "s4_12_itens_nao_inclusos",
             ]
-            sections_ids = base_sections + [s for s in optional_sections if s in sections_present]
+            
+            # Build section list: base + conditional section 4 subsections
+            sections_ids = base_sections + [s for s in optional_section4_subsections if s in sections_present]
         else:
             sections_ids = [
                 "s1_introducao",

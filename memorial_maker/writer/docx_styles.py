@@ -151,7 +151,7 @@ def add_header_footer(doc: Document, project_data: dict):
         run.add_picture(str(footer_img), width=Cm(22.0))
 
 
-def add_cover_page(doc: Document, logo_path: str, project_data: dict):
+def add_cover_page(doc: Document, logo_path: str, project_data: dict, memorial_type: str = "telecom"):
     """Adiciona capa ao documento seguindo o modelo padrão.
     
     Estrutura do modelo:
@@ -161,6 +161,12 @@ def add_cover_page(doc: Document, logo_path: str, project_data: dict):
     - Nome do empreendimento (centro, negrito)
     - Endereço (centro)
     - Data (centro, no final)
+    
+    Args:
+        doc: Documento python-docx
+        logo_path: Caminho para logo (opcional)
+        project_data: Dados do projeto
+        memorial_type: Tipo de memorial ("telecom" ou "eletrico")
     """
     from pathlib import Path
     from datetime import datetime
@@ -192,10 +198,15 @@ def add_cover_page(doc: Document, logo_path: str, project_data: dict):
     for _ in range(6):
         doc.add_paragraph()
     
-    # Título do memorial (centro, negrito)
+    # Título do memorial (centro, negrito) - CONDICIONAL
     title = doc.add_paragraph()
     title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    run = title.add_run("MEMORIAL DESCRITIVO E ESPECIFICAÇÕES TÉCNICAS DAS INSTALAÇÕES DE TELECOMUNICAÇÕES")
+    if memorial_type == "eletrico":
+        empreendimento = project_data.get("empreendimento", "")
+        title_text = f"MEMORIAL DESCRITIVO E ESPECIFICAÇÕES TÉCNICAS DAS INSTALAÇÕES ELÉTRICAS DO EDIFÍCIO {empreendimento.upper()}"
+    else:
+        title_text = "MEMORIAL DESCRITIVO E ESPECIFICAÇÕES TÉCNICAS DAS INSTALAÇÕES DE TELECOMUNICAÇÕES"
+    run = title.add_run(title_text)
     run.font.name = 'Arial'
     run.font.size = Pt(12)
     run.font.bold = True

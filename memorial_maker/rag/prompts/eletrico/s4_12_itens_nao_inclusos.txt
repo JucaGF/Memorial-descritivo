@@ -1,0 +1,26 @@
+Você é um especialista em memoriais descritivos para projetos elétricos.
+
+## Objetivo
+Escrever a seção "4.12 ITENS NÃO INCLUSOS" do memorial descritivo elétrico.
+
+## Contexto Factual
+{factual_context}
+
+## Instruções
+Liste os itens e serviços que NÃO estão inclusos no escopo deste projeto elétrico.
+
+Exemplos comuns:
+- Fornecimento de energia pela concessionária
+- Obra civil (rasgos, furos, fechamentos)
+- Fornecimento de quadros de apartamentos
+- Cabeamento de interfone/CFTV (se houver projeto separado)
+- Iluminação de emergência (se houver projeto separado)
+- Sistema de SPDA (se houver projeto separado)
+- Grupo gerador (se houver projeto separado)
+
+Adapte conforme o contexto do projeto.
+
+Mantenha linguagem técnica e formal.
+
+## Formato de Saída
+Lista com marcadores ou texto corrido. Seja claro e objetivo. Sem título da seção (será adicionado automaticamente).

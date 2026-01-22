@@ -70,7 +70,7 @@ class MemorialWriter:
         
         # Capa do memorial
         from memorial_maker.writer.docx_styles import add_cover_page
-        add_cover_page(self.doc, None, project_data)
+        add_cover_page(self.doc, None, project_data, memorial_type)
         
         # Sumário - conditional based on memorial type
         if memorial_type == "eletrico":
@@ -108,7 +108,15 @@ class MemorialWriter:
     def _write_section_2(self, content: str):
         """Seção 2: Dados da Obra."""
         add_section_heading(self.doc, "2", "DADOS DA OBRA", level=1)
-        add_body_text(self.doc, content)
+        # Use LEFT alignment for better readability with bullet lists
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
+        paragraphs = content.split("\n\n")
+        for para_text in paragraphs:
+            para_text = para_text.strip()
+            if not para_text:
+                continue
+            para = self.doc.add_paragraph(para_text, style='Normal')
+            para.alignment = WD_ALIGN_PARAGRAPH.LEFT
 
     def _write_section_3(self, content: str):
         """Seção 3: Normas Técnicas."""
@@ -156,94 +164,123 @@ class MemorialWriter:
     def _write_electrical_sections(self, sections: Dict[str, str]):
         """Escreve seções do memorial elétrico (dinâmico, apenas seções presentes).
         
+        Matches reference memorial structure with sections 1-5.
+        
         Args:
             sections: Dicionário {section_id: content} - apenas seções com conteúdo
         """
-        # Sumário (se presente)
-        if "s1_sumario" in sections:
-            content = sections["s1_sumario"]
+        # Sumário (Static TOC)
+        if "s0_sumario" in sections:
+            content = sections["s0_sumario"]
             if content and len(content.strip()) > 50:
                 add_section_heading(self.doc, "", "SUMÁRIO", level=1)
-                add_body_text(self.doc, content)
+                # Add sumário with LEFT alignment to avoid excessive word spacing
+                from docx.enum.text import WD_ALIGN_PARAGRAPH
+                paragraphs = content.split("\n\n")
+                for para_text in paragraphs:
+                    para_text = para_text.strip()
+                    if not para_text:
+                        continue
+                    para = self.doc.add_paragraph(para_text, style='Normal')
+                    # Override alignment to LEFT for better readability in TOC
+                    para.alignment = WD_ALIGN_PARAGRAPH.LEFT
         
-        # Memorial Descritivo (seção principal)
-        if "s2_memorial_descritivo" in sections:
-            content = sections["s2_memorial_descritivo"]
+        # Section 1: INTRODUÇÃO
+        if "s1_introducao" in sections:
+            content = sections["s1_introducao"]
             if content and len(content.strip()) > 50:
-                add_section_heading(self.doc, "1", "MEMORIAL DESCRITIVO", level=1)
+                add_section_heading(self.doc, "1", "INTRODUÇÃO", level=1)
                 add_body_text(self.doc, content)
         
-        # Introdução (subseção 1.1)
-        if "s2_1_introducao" in sections:
-            content = sections["s2_1_introducao"]
+        # Section 2: DADOS DA OBRA
+        if "s2_dados_obra" in sections:
+            content = sections["s2_dados_obra"]
             if content and len(content.strip()) > 50:
-                add_section_heading(self.doc, "1.1", "INTRODUÇÃO", level=2)
-                add_body_text(self.doc, content)
+                add_section_heading(self.doc, "2", "DADOS DA OBRA", level=1)
+                # Use LEFT alignment for better readability with bullet lists
+                from docx.enum.text import WD_ALIGN_PARAGRAPH
+                paragraphs = content.split("\n\n")
+                for para_text in paragraphs:
+                    para_text = para_text.strip()
+                    if not para_text:
+                        continue
+                    para = self.doc.add_paragraph(para_text, style='Normal')
+                    para.alignment = WD_ALIGN_PARAGRAPH.LEFT
         
-        # Generalidades (subseção 1.2)
-        if "s2_2_generalidades" in sections:
-            content = sections["s2_2_generalidades"]
+        # Section 3: REQUISITOS GERAIS
+        if "s3_requisitos_gerais" in sections:
+            content = sections["s3_requisitos_gerais"]
             if content and len(content.strip()) > 50:
-                add_section_heading(self.doc, "1.2", "GENERALIDADES", level=2)
+                add_section_heading(self.doc, "3", "REQUISITOS GERAIS", level=1)
                 add_body_text(self.doc, content)
         
-        # Descrição dos Serviços (subseção 1.3)
-        if "s2_3_descricao_servicos" in sections:
-            content = sections["s2_3_descricao_servicos"]
+        # Section 3.1: DISPOSIÇÕES GERAIS
+        if "s3_1_disposicoes_gerais" in sections:
+            content = sections["s3_1_disposicoes_gerais"]
             if content and len(content.strip()) > 50:
-                add_section_heading(self.doc, "1.3", "DESCRIÇÃO DOS SERVIÇOS", level=2)
+                add_section_heading(self.doc, "3.1", "DISPOSIÇÕES GERAIS", level=2)
                 add_body_text(self.doc, content)
         
-        # Subseções de Descrição dos Serviços (dinâmico)
-        descricao_subsections = [
-            ("1.3.1", "ENTRADA DE ENERGIA E MEDIÇÃO", "s2_3_1_entrada_energia"),
-            ("1.3.2", "INSTALAÇÃO DE LUZ E FORÇA", "s2_3_2_luz_forca"),
-            ("1.3.3", "LUZ ESSENCIAL / SUBESTAÇÃO ABRIGADA", "s2_3_3_luz_essencial"),
-            ("1.3.4", "PROTEÇÃO CONTRA CHOQUES ELÉTRICOS E ATERRAMENTO", "s2_3_4_protecao_aterramento"),
-            ("1.3.5", "MONTAGEM DE APARELHOS", "s2_3_5_montagem_aparelhos"),
+        # Section 3.2: DISPOSIÇÕES DE BASE DE PROJETO
+        if "s3_2_disposicoes_base_projeto" in sections:
+            content = sections["s3_2_disposicoes_base_projeto"]
+            if content and len(content.strip()) > 50:
+                add_section_heading(self.doc, "3.2", "DISPOSIÇÕES DE BASE DE PROJETO", level=2)
+                add_body_text(self.doc, content)
+        
+        # Section 4: VISÃO GERAL DO SISTEMA DE INSTALAÇÕES ELÉTRICAS
+        if "s4_visao_geral" in sections:
+            content = sections["s4_visao_geral"]
+            if content and len(content.strip()) > 50:
+                add_section_heading(self.doc, "4", "VISÃO GERAL DO SISTEMA DE INSTALAÇÕES ELÉTRICAS", level=1)
+                add_body_text(self.doc, content)
+        
+        # Section 4 subsections (4.1-4.12) - conditional
+        section4_subsections = [
+            ("4.1", "INSTALAÇÃO DE ENTRADA E MEDIÇÃO DE ENERGIA", "s4_1_entrada_energia"),
+            ("4.2", "SUBESTAÇÃO ABRIGADA", "s4_2_subestacao"),
+            ("4.2.1", "DADOS CONSTRUTIVOS DA SUBESTAÇÃO", "s4_2_1_dados_construtivos"),
+            ("4.3", "ATERRAMENTO", "s4_3_aterramento"),
+            ("4.4", "ELETRODUTOS, LEITOS E CANALETAS", "s4_4_eletrodutos_leitos"),
+            ("4.5", "CONDUTORES", "s4_5_condutores"),
+            ("4.6", "MEDIÇÃO DE ENERGIA ELÉTRICA", "s4_6_medicao_energia"),
+            ("4.7", "CORES PADRONIZADAS", "s4_7_cores"),
+            ("4.8", "INSTALAÇÃO DE LUZ E FORÇA", "s4_8_luz_forca"),
+            ("4.9", "INSTALAÇÃO DE LUZ ESSENCIAL (GRUPO GERADOR)", "s4_9_luz_essencial"),
+            ("4.10", "PROTEÇÃO CONTRA CHOQUES ELÉTRICOS E ATERRAMENTO", "s4_10_protecao_aterramento"),
+            ("4.11", "MONTAGEM DOS APARELHOS", "s4_11_montagem_aparelhos"),
+            ("4.12", "ITENS NÃO INCLUSOS", "s4_12_itens_nao_inclusos"),
         ]
         
-        for number, title, section_id in descricao_subsections:
+        for number, title, section_id in section4_subsections:
             if section_id in sections:
                 content = sections[section_id]
                 if content and len(content.strip()) > 50:
-                    add_section_heading(self.doc, number, title, level=3)
+                    # Determine level: 4.2.1 is level 3, others are level 2
+                    level = 3 if number == "4.2.1" else 2
+                    add_section_heading(self.doc, number, title, level=level)
                     add_body_text(self.doc, content)
         
-        # Especificação dos Materiais (seção principal)
-        if "s3_especificacao_materiais" in sections:
-            content = sections["s3_especificacao_materiais"]
+        # Section 5: ESPECIFICAÇÕES DOS MATERIAIS
+        if "s5_especificacao_materiais" in sections:
+            content = sections["s5_especificacao_materiais"]
             if content and len(content.strip()) > 50:
-                add_section_heading(self.doc, "2", "ESPECIFICAÇÃO DOS MATERIAIS", level=1)
+                add_section_heading(self.doc, "5", "ESPECIFICAÇÕES DOS MATERIAIS", level=1)
                 add_body_text(self.doc, content)
         
-        # Introdução Materiais (subseção 2.1)
-        if "s3_1_introducao_materiais" in sections:
-            content = sections["s3_1_introducao_materiais"]
-            if content and len(content.strip()) > 50:
-                add_section_heading(self.doc, "2.1", "INTRODUÇÃO", level=2)
-                add_body_text(self.doc, content)
-        
-        # Instalações Elétricas (subseção 2.2)
-        if "s3_2_instalacoes_eletricas" in sections:
-            content = sections["s3_2_instalacoes_eletricas"]
-            if content and len(content.strip()) > 50:
-                add_section_heading(self.doc, "2.2", "INSTALAÇÕES ELÉTRICAS", level=2)
-                add_body_text(self.doc, content)
-        
-        # Subseções de Instalações Elétricas (dinâmico)
-        instalacoes_subsections = [
-            ("2.2.1", "ELETRODUTOS, ELETROCALHAS E ACESSÓRIOS", "s3_2_1_eletrodutos"),
-            ("2.2.2", "FIOS, CABOS DE ENERGIA E COMANDO", "s3_2_2_fios_cabos"),
-            ("2.2.3", "LUMINÁRIAS E ACESSÓRIOS", "s3_2_3_luminarias"),
-            ("2.2.4", "QUADROS GERAIS DE LUZ E FORÇA E ACESSÓRIOS", "s3_2_4_quadros"),
+        # Section 5 subsections (5.1-5.4) - always included
+        section5_subsections = [
+            ("5.1", "INSTALAÇÕES ELÉTRICAS", "s5_1_instalacoes_eletricas"),
+            ("5.2", "FIOS E CABOS DE ENERGIA E COMANDO", "s5_2_fios_cabos"),
+            ("5.3", "LUMINÁRIAS E ACESSÓRIOS", "s5_3_luminarias"),
+            ("5.4", "QUADROS GERAIS DE LUZ E FORÇA E ACESSÓRIOS", "s5_4_quadros"),
         ]
         
-        for number, title, section_id in instalacoes_subsections:
+        for number, title, section_id in section5_subsections:
             if section_id in sections:
                 content = sections[section_id]
                 if content and len(content.strip()) > 50:
-                    add_section_heading(self.doc, number, title, level=3)
+                    add_section_heading(self.doc, number, title, level=2)
                     add_body_text(self.doc, content)
 
 

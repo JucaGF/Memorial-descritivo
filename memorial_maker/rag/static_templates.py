@@ -59,16 +59,20 @@ class StaticTemplateLoader:
 
 # Mapping of section IDs to static template names
 STATIC_TEMPLATES = {
-    # Section 1 - Introdução
-    "s2_1_introducao": "s1_introducao",
+    # Sumário (static TOC)
+    "s0_sumario": "s0_sumario",
     
-    # Section 3 - Requisitos Gerais
-    "s2_2_generalidades": "s3_requisitos_gerais",
-    "s2_2_disposicoes_gerais": "s3_1_disposicoes_gerais",
+    # Section 1 - Introdução (static)
+    "s1_introducao": "s1_introducao",
     
-    # Section 4 - Visão Geral  
-    "s2_memorial_descritivo": "s4_visao_geral_intro",
-    "s2_3_6_medicao_energia": "s4_6_medicao_energia",
+    # Section 3 - Requisitos Gerais (static)
+    "s3_requisitos_gerais": "s3_requisitos_gerais",
+    "s3_1_disposicoes_gerais": "s3_1_disposicoes_gerais",
+    
+    # Section 4 - Visão Geral (intro is static)
+    "s4_visao_geral": "s4_visao_geral_intro",
+    "s4_6_medicao_energia": "s4_6_medicao_energia",
     
     # Add more mappings as templates are created
 }
+

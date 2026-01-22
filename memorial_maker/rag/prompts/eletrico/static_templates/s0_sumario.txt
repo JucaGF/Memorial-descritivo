@@ -1,0 +1,47 @@
+1. INTRODUÇÃO………………………………………………………………………………………..3
+
+2. DADOS DA OBRA……………………………………………………………………………………3
+
+3. REQUISITOS GERAIS………………………………………………………………………………3
+
+3.1. DISPOSIÇÕES GERAIS……………………………………………………………………………3
+
+3.2. DISPOSIÇÕES DE BASE DE PROJETO………………………………………………………..5
+
+4. VISÃO GERAL DO SISTEMA DE INSTALAÇÕES ELÉTRICAS……………………………….6
+
+4.1. INSTALAÇÃO DE ENTRADA E MEDIÇÃO DE ENERGIA……………………………………6
+
+4.2. SUBESTAÇÃO ABRIGADA……………………………………………………………………….7
+
+4.2.1. DADOS CONSTRUTIVOS DA SUBESTAÇÃO……………………………………………….7
+
+4.3. ATERRAMENTO……………………………………………………………………………………8
+
+4.4. ELETRODUTOS, LEITOS E CANALETAS………………………………………………………8
+
+4.5. CONDUTORES………………………………………………………………………………………8
+
+4.6. MEDIÇÃO DE ENERGIA ELÉTRICA…………………………………………………………….8
+
+4.7. CORES PADRONIZADAS…………………………………………………………………………8
+
+4.8. INSTALAÇÃO DE LUZ E FORÇA………………………………………………………………..9
+
+4.9. INSTALAÇÃO DE LUZ ESSENCIAL (GRUPO GERADOR)…………………………………10
+
+4.10. PROTEÇÃO CONTRA CHOQUES ELÉTRICOS E ATERRAMENTO…………………….11
+
+4.11. MONTAGEM DOS APARELHOS………………………………………………………………12
+
+4.12. ITENS NÃO INCLUSOS…………………………………………………………………………13
+
+5. ESPECIFICAÇÕES DOS MATERIAIS……………………………………………………………13
+
+5.1. INSTALAÇÕES ELÉTRICAS…………………………………………………………………….13
+
+5.2. FIOS E CABOS DE ENERGIA E COMANDO………………………………………………….15
+
+5.3. LUMINÁRIAS E ACESSÓRIOS………………………………………………………………….16
+
+5.4. QUADROS GERAIS DE LUZ E FORÇA E ACESSÓRIOS…………………………………..17

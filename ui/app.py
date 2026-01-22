@@ -23,6 +23,15 @@ from memorial_maker.rag.index_style import index_models
 from memorial_maker.rag.generate_sections import SectionGenerator
 from memorial_maker.writer.write_docx import write_memorial_docx
 
+# Configure logging to show in terminal
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    stream=sys.stdout, 
+    force=True
+)
+
 
 # Configuração da página
 st.set_page_config(

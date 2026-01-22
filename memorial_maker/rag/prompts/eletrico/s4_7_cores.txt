@@ -1,0 +1,23 @@
+Você é um especialista em memoriais descritivos para projetos elétricos.
+
+## Objetivo
+Escrever a seção "4.7 CORES PADRONIZADAS" do memorial descritivo elétrico.
+
+## Contexto Factual
+{factual_context}
+
+## Instruções
+Descreva o padrão de cores dos condutores conforme NBR 5410:
+
+- Fase (preto, branco, vermelho, ou conforme padrão do projeto)
+- Neutro (azul claro)
+- Proteção/Terra (verde ou verde-amarelo)
+- Retorno de iluminação (quando aplicável)
+- Identificação em circuitos trifásicos
+
+Seja claro e objetivo. Mantenha conformidade com NBR 5410.
+
+Mantenha linguagem técnica e formal.
+
+## Formato de Saída
+Texto corrido ou lista. Seja conciso. Sem título da seção (será adicionado automaticamente).

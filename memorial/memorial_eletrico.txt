@@ -1,0 +1,614 @@
+MEMORIAL n° 08/2025 Muda conforme cadastro MGA CONSTRUÇÕES E
+INCORPORAÇÕES LTDA MEMORIAL DESCRITIVO E ESPECIFICAÇÕES TÉCNICAS DAS
+INSTALAÇÕES
+ELÉTRICAS DO EDIFÍCIO MAKAI EDIFÍCIO MAKAI Avenida Max Zagel, S/N, Lote
+05-A Quadra 12, Cabedelo – PB JOÃO PESSOA NOVEMBRO DE 2025
+
+SUMÁRIO Atualizar valores das páginas
+1.INTRODUÇÃO………………………………………………………………………………………..3 2.DADOS DA
+OBRA……………………………………………………………………………………3 3.REQUISITOS
+GERAIS………………………………………………………………………………3 3.1. DISPOSIÇÕES
+GERAIS……………………………………………………………………………3 3.2. DISPOSIÇÕES DE BASE DE
+PROJETO………………………………………………………..5 4. VISÃO GERAL DO SISTEMA DE INSTALAÇÕES
+ELÉTRICAS……………………………….6 4.1. INSTALAÇÃO DE ENTRADA E MEDIÇÃO DE
+ENERGIA……………………………………6 4.2. SUBESTAÇÃO
+ABRIGADA……………………………………………………………………….7 4.2.1. DADOS CONSTRUTIVOS DA
+SUBESTAÇÃO……………………………………………….7 4.3.
+ATERRAMENTO……………………………………………………………………………………8 4.4. ELETRODUTOS, LEITOS E
+CANALETAS………………………………………………………8 4.5.
+CONDUTORES………………………………………………………………………………………8 4.6. MEDIÇÃO DE ENERGIA
+ELÉTRICA…………………………………………………………….8 4.7. CORES
+PADRONIZADAS…………………………………………………………………………8 4.8. INSTALAÇÃO DE LUZ E
+FORÇA………………………………………………………………..9 4.9. INSTALAÇÃO DE LUZ ESSENCIAL (GRUPO
+GERADOR)…………………………………10 4.10. PROTEÇÃO CONTRA CHOQUES ELÉTRICOS E
+ATERRAMENTO…………………….11 4.11. MONTAGEM DOS
+APARELHOS………………………………………………………………12 4.12. ITENS NÃO
+INCLUSOS…………………………………………………………………………13 5. ESPECIFICAÇÕES DOS
+MATERIAIS……………………………………………………………13 5.1. INSTALAÇÕES
+ELÉTRICAS…………………………………………………………………….13 5.2. FIOS E CABOS DE ENERGIA E
+COMANDO………………………………………………….15 5.3. LUMINÁRIAS E
+ACESSÓRIOS………………………………………………………………….16 5.4. QUADROS GERAIS DE LUZ E
+FORÇA E ACESSÓRIOS…………………………………..17
+
+1.INTRODUÇÃO: Fixo Faz parte deste memorial e, consequentemente, do
+orçamento, o fornecimento de todo o
+material, mão de obra, encargos sociais e fiscalização para a completa
+execução dos serviços
+propostos no projeto, conforme abaixo descrito. 2. DADOS DA OBRA
+Construtora: MGA Construções e Incorporações LTDA; Obra: Edifício
+Makai; Localização: Avenida Max Zagel, S/N, Lote 05-A Quadra 12,
+Cabedelo – PB; Tipo de Edificação: Residencial Multifamiliar;
+Tipologia: Subsolo, Térreo, 7 Pav. tipos, Cobertura e Coberta;
+Quantidade de apartamentos: 30 Apartamentos; Quantidade de lojas: Sem
+lojas. Quantidade de restaurantes: Sem restaurantes.
+Muda conforme cadastro 3.REQUISITOS GERAIS Fixo Os serviços acima
+mencionados serão executados de acordo com as indicações dos
+desenhos e deste memorial. A contratada para a execução das instalações
+elétricas deverá apresentar ao
+contratante, uma vez finalizado os serviços e antes da liberação da
+retenção, desenhos
+“conforme construído”, indicando as alterações introduzidas em obra em
+relação ao projeto
+inicial. Os serviços deverão ser executados de acordo com o andamento da
+obra, conforme
+indicado nas disposições gerais. 3.1. DISPOSIÇÕES GERAIS Fixo Emprego
+de ferramentas apropriadas para cada tipo de trabalho. Os eletrodutos
+serão cortados por serra, e as bordas aparadas com lima para
+remoção de rebarbas. O raio mínimo de curvatura dos tubos não deve ser
+superior a 6 (seis) vezes o
+diâmetro do mesmo. Durante a concretagem, todas as pontas de tubos
+expostas deverão ser fechadas por
+meio de caps galvanizados.
+
+As ligações dos eletrodutos às caixas deverão ser feitas por meio de
+buchas e
+arruelas galvanizadas. A enfiação será feita somente após o
+revestimento com massa fina, azulejos e
+ladrilhos. Antes da enfiação, as tubulações deverão ser
+convenientemente limpas. Nas
+tubulações secas, deverão ser deixados arames guia galvanizados a fogo,
+a fim de
+facilitar futuras enfiações. Todas as caixas e quadros nas alvenarias
+deverão ser chumbados com argamassa. Todas as emendas dos fios deverão
+ser isoladas e convenientemente soldadas. Os
+cabos com secção superior a 6 mm2 deverão ter emendas por meio de
+conectores
+apropriados. Em hipótese alguma serão permitidas emendas de condutores
+dentro de eletrodutos. Deverá ser feito teste de isolação em todos os
+circuitos, com obtenção de resultados
+conforme a tabela 81 da NBR 5410 da ABNT. Todos os cabos verticais
+deverão ser fixos em caixas de passagem ou perfilados por
+meio de braçadeiras, sendo no mínimo duas fixações por pavimento afim de
+diminuir
+a tensão mecânica nos mesmos, devido ao peso próprio. Os eletrodutos
+serão instalados, quando na posição horizontal, com leve declínio no
+sentido das caixas, para efeitos de evitar acúmulos de água condensada.
+Todas as caixas de madeira e fundos devem ser pintadas com duas mãos de
+verniz
+isolante. A firma instaladora se encarregará de efetuar os pedidos de
+ligações, aprovações e
+inspeções que se fizerem necessários, devendo antes da execução dos
+serviços
+consultar as respectivas concessionárias. As instalações a serem
+executadas na forma do presente memorial, deverão ser
+garantidas pela firma instaladora quanto à qualidade do material
+empregado, e ainda
+quanto à conformidade das exigências em vigor, nesta data, imposta pelas
+repartições e companhias concessionárias com jurisdição sobre as
+referidas
+instalações. A firma instaladora deverá substituir por sua conta,
+qualquer material ou aparelho de
+seu fornecimento que, durante o prazo de 1 (um) ano, a contar da entrega
+definitiva
+da obra, apresentar defeitos decorrentes de fabricação ou da instalação
+dos mesmos,
+neste caso a garantia do material ou do aparelho de fornecimento da
+proponente
+eventualmente substituído passará a contar da data de substituição do
+mesmo. Ficam
+ressalvados, entretanto, os casos em que os defeitos verificados
+provenham do uso
+impróprio das instalações ou do desgaste natural dos materiais.
+
+Baseado no Edital do Confea e na Lei Federal n. 5194, as firmas devem
+possuir como
+sócio ou funcionário devidamente registrado, um engenheiro eletricista,
+legalmente
+registrado no CREA. Portanto, o proponente deverá se enquadrar no
+citado. O proponente deverá apresentar a inscrição no INSS. No preço
+apresentado, deverão
+ser previstas todas as leis sociais e trabalhistas em vigor. O
+proponente em hipótese alguma poderá subempreitar parte ou todo o
+trabalho, sem
+e cumprimento das leis sociais, obrigando-se a verificar se a
+sublocadora está inscrita
+no INSS. Todos os quadros de energia elétrica deverão ter os seus
+projetos executivos
+fornecidos pelo fabricante enviados com consentimento por escrito do
+Engenheiro
+Fiscal. Este consentimento não eximirá o contrato de responsabilidades
+técnicas à
+fiscalização da OBRA para aprovação prévia. Todos os funcionários da
+empresa contratada para execução dos serviços, deverão
+possuir identificação através de crachás, onde contenha os seguintes
+dados: nome,
+número de RG, cargo ocupado, número da carteira de trabalho e grupo
+sanguíneo. Antes de qualquer desligamento de carga elétrica temporária
+ou por períodos
+definidos, deverão ser previamente notificados por escrito e liberado
+pela gerência da
+obra. Qualquer alteração nos projetos elétricos deverá ser previamente
+informados e
+aprovados pelo engenheiro fiscal da Obra, antes de sua efetiva execução.
+3.2.DISPOSIÇÕES DE BASE DE PROJETO: Fixo A queda de tensão dos
+alimentadores seguiu o seguinte critério: 2% entre os trafos e os
+quadros de distribuição, 3% entre os quadros de distribuição e os
+circuitos
+terminais. Pode variar (raríssimas exceções) Todos os cabos e/ou fios
+deverão ser com baixa emissão de compostos halógenos e
+deverão atender o critério de queda de tensão conforme especificado no
+item
+anterior. Todos os alimentadores foram dimensionados de acordo com as
+normas da Energisa
+Paraíba NDU-002 e com a norma NBR-5410 Instalações Elétricas em Baixa
+Tensão. Como consequência dos valores reduzidos de queda, também foi
+atendido o critério
+de dimensionamento ambiental, onde o aumento das seções transversais dos
+condutores (fios e cabos) justifica o aumento de vida útil dos mesmos e
+consequentemente compensação de emissão futura de CO2.
+
+Todos os fabricantes dos materiais e equipamentos elétricos a serem
+empregados
+nas instalações elétricas deverão possuir requisitos que as respectivas
+NBRs. Todos os motores e dispositivos de acionamento elétrico deverão
+estar de acordo
+com as diretrizes da ASHRAE 90.1-2007 com relação à eficiência
+energética, ou seja,
+deverão apresentar alta eficiência, de no mínimo 93%, principalmente
+para os
+motores de maior potência entre 20 e 50 CV. Nos motores com potência
+abaixo de
+20CV, deverá ser empregado para o acionamento de dispositivos tipo chave
+de
+partida estática principalmente em elevadores, bombas de água e
+exaustores de
+sistema de incêndio e renovação de ar. Todos os equipamentos empregados
+no sistema de climatização deverão obedecer
+aos critérios do item anterior. O projeto luminotécnico das áreas
+comuns deverá seguir os requisitos das normas
+NBR ISO/CIE 8995-1:2013-Iluminação de ambientes de trabalho-Parte 1,
+ambientes
+internos e Parte 2 ambientes externos, NBR 5413:1992-Iluminância de
+Interiores de
+modo a garantir a menor quantidade possível de consumo por m2,
+garantindo maior
+eficiência de lumens/m2 em função da aplicação no local em que foi
+instalada a
+iluminação. Para a comprovação na obra do atendimento dos requisitos de
+controle de qualidade
+especificados no projeto, deverão ser feitos registros fotográficos,
+cópias de notas
+fiscais de aquisição de materiais, ensaios de funcionamento
+(comissionamento), os
+quais obrigatoriamente serão emitidos por profissionais legalmente
+habilitados e
+qualificados. O empreendimento será atendido pelo sistema de geração de
+emergência através de
+grupo geradores a diesel com dimensionamento da infraestrutura dos
+painéis com
+níveis compatíveis de CC. 4.VISÃO GERAL DO SISTEMA DE INSTALAÇÕES
+ELÉTRICAS Fixo O sistema de instalações elétricas projetados foram
+concebidos de forma a atender aos
+requisitos de conforto e funcionalidade da edificação, garantindo um
+perfeito funcionamento de
+todos os subsistemas integrantes do escopo do projeto. Para tal, os
+parâmetros de projeto
+foram considerados de maneira que se obtenha um dimensionamento a favor
+da confiabilidade
+de funcionamento, proporcionando um melhor desempenho dos sistemas
+elétricos e que
+garanta maior vida útil das instalações.
+
+4.1.INSTALAÇÃO DE ENTRADA E MEDIÇÃO DE ENERGIA Variável O suprimento de
+energia para as instalações será através de uma subestação abrigada
+abaixadora alimentada através da entrada de MT-13.8KV. Podem ser
+incluídas caixas para marcar as opções - Com Subestação (pode ser aérea,
+abrigada convencional ou abrigada compacta) - Sem subestação
+4.2.SUBESTAÇÃO ABRIGADA Apenas se tiver subestação Será instalado 01
+(um) transformador trifásico de 1.000kVA, isolado à seco, para
+atendimento
+de todas as cargas do “ Centro de Convenções de Patos-PB ”, com as
+seguintes tensões: Primário:
+
+oTap 1 – 13.800 V; oTap 2 - 13.200 V; oTap 3 – 12.600 V; oTap 4 – 12.000
+V; oTap 5 – 11.400 V. Secundário: 380 V entre fases e 220 V entre fases
+e neutro. 4.2.1.DADOS CONSTRUTIVOS DA SUBESTAÇÃO Apenas se tiver
+subestação As paredes, o teto e o piso são construídos em laje de
+concreto armado, o piso é
+revestido em cerâmica. A espessura das paredes é de 0,15m. O pé direito
+mínimo é de 3,00m. Como o teto da subestação e o piso a
+impermeabilidade total contra a infiltração d’água
+está garantida. As portas são metálicas, com abertura para fora, são de
+dimensão de 2x(0,70x2,10) m
+e possui afixada placa com a indicação “PERIGO DE MORTE – ALTA TENSÃO”.
+Os corredores para acesso e manobra de equipamentos possuem espaço
+livre de
+1,85m de largura e não existem degraus ou rampas. A subestação possui
+iluminação natural suficiente para operação normal durante o dia.
+Durante a noite a iluminação será fornecida por luminárias detalhadas em
+planta. A ventilação da subestação será executada de modo natural, com
+circulação de ar
+através de Portas e Janelas fixas, todas construídas com venezianas,
+conforme
+detalhe em planta e equipados com telas de proteção em arame de aço,
+conforme
+detalhe em planta.
+
+A subestação está equipada com extintores para combate a incêndio do
+tipo Classe - C
+e atende as demais exigências de segurança estabelecida na norma NR-23
+da
+consolidação das leis do trabalho. Se encontra instalada na tela de
+proteção do transformador uma placa constando, a
+potência em kVA do transformador fabricante, número de série, impedância
+e data de
+fabricação. Esta placa é pintada com fundo amarelo e letras/números
+pretos.
+4.3.ATERRAMENTO Fixo Todos os equipamentos e partes metálicas e não
+vivas que compõem a subestação, deverão
+estar conectados à malha de aterramento a ser executada na calçada,
+composta de 7 (sete) hastes tipo Copperweld 5/8x2.400mm, conectadas
+entre si através de cabos de cobre nu
+50mm², utilizando-se solda exotérmica. Valores mudam conforme projeto
+4.4.ELETRODUTOS, LEITOS E CANALETAS
+
+Para a proteção mecânica dos condutores do circuito de MT 15kV e que se
+encontram
+instalados no poste da estrutura de entrada será utilizado eletroduto de
+aço galvanizado à
+quente na bitola de 4”. Serão utilizados eletrodutos de aço galvanizado
+à quente na bitola de 4”, envelopados em concreto para a proteção
+mecânica dos condutores do ramal subterrâneo da estrutura de
+entrada até o cubículo da medição na subestação abrigada, acima do
+envelope de concreto e
+abaixo do piso acabado. Serão instaladas fitas de PVC na cor amarela com
+escrita em vermelho de aviso de condutores
+enterrados. Nas demais interligações entre transformador e o QGBT, no
+interior da subestação, serão
+utilizados eletrodutos corrugados, PEAD, semiembutidos no piso. Nas
+interligações dos condutores de comando, sinalização e tele supervisão,
+estes condutores
+deverão estar instalados em eletrodutos flexíveis metalizados.
+4.5.CONDUTORES Ramal subterrâneo de MT – 15KV : O circuito de
+alimentação primária da subestação
+será executado por cabos EPR/XLPE a 90° com isolação para 8,7/15KV,
+secção
+35mm². Variável conforme subestação Alimentações em BT: Todos os
+condutores a serem instalados nos circuitos de BT será
+executado por cabos XLPE / EPR 90º C para 0,6/1KV. Fixo 4.6.MEDIÇÃO DE
+ENERGIA ELÉTRICA
+
+A medição será executada em BT, terá seu medidor alojado em caixa
+específica, padrão
+ENERGISA. Fixo 4.7.CORES PADRONIZADAS Barramento de MT-15 KV: Serão
+construídos em vergalhões circulares de cobre
+eletrolítico, nas bitolas especificadas em planta e pintados nas cores
+padronizadas pela
+NBR. 14039: Apenas no caso de subestação oFASE A – Vermelho; oFASE B –
+Branco; oFASE C – Marrom. Barramentos de BT 380/220V: Serão construídos
+em barras retangulares de cobre
+eletrolítico, nas bitolas especificadas em planta e pintados nas cores:
+oFASE A – Azul Escuro; oFASE B – Branco; oFASE C – Lilás; oNEUTRO – Azul
+Claro; oTERRA – Verde. Condutores de BT: Os condutores deverão ser na
+cor preta com identificação
+executada com fita isolante de acordo com a seguinte codificação: oFASE
+A – Vermelho; oFASE B – Preto; oFASE C – Branco; oNEUTRO – Azul Claro;
+oTERRA – Verde. 4.8.INSTALAÇÃO DE LUZ E FORÇA
+Fixo A instalação de luz foi projetada de acordo com as Normas
+Brasileiras de Eletricidade,
+especificamente a NBR 5410 da ABNT. A distribuição de luz será
+monofásica (fase e neutro) – 220V para todo o empreendimento. A
+queda de tensão máxima permitida nos circuitos alimentadores será de
+2,0%, a partir dos
+quadros de distribuição de luz. A secção mínima dos condutores deve ser
+a seguinte: Circuito de Luz - 1,5 mm² salvo quando destacado a bitola;
+Circuito de Força - 2,5 mm²; Circuito de comando - 1,0 mm².
+
+A tubulação foi dimensionada para condutores de cobre com isolamento
+térmico para 70 ºC/
+750 Volts série métrica ou 90°C 01KV conforme o caso. A tubulação
+projetada é de eletroduto de PVC rígido, próprio para utilização em
+instalações
+elétricas, quando embutidos e no entreforro, galvanizados quando
+aparentes e flexíveis
+corrugados quando embutidos em espaços de alvenaria ou dry wall ou sob
+piso elevado. As alimentações dos quadros de luz serão de 3 (três)
+fases, 1 (um) neutro e 1 (um) terra,
+resultando 220/380 Volts. Os circuitos alimentadores dos quadros de luz
+e força, deverão ser executados com cabos de
+cobre no mínimo c/ com isolação e cobertura de XLPE/EPR 90°C, 1KV
+conforme especificado
+no projeto. Os quadros de distribuição de luz serão constituídos de
+disjuntores termomagnéticos, curva “c”,
+padrão DIN, montados sobre caixa de material IP45, completa com
+porta-etiquetas, barramento
+de cobre eletrolítico 99% de pureza, chave seccionadora sob carga e
+disjuntores parciais,
+conforme indicações em projeto. Os disjuntores serão fixados sobre placa
+total de material
+isolante, com possibilidade de extração separada. Os quadros de
+distribuição de força serão constituídos de disjuntores termomagnéticos,
+padrão
+DIN montados sobre caixa de ferro nº 14 USG, IP54, ou conforme indicado
+em projeto. Os disjuntores para circuitos em 220 Volts serão unipolares
+e os circuitos em 380 V, serão
+tripolares, de acordo com as indicações em projeto. Todas as caixas de
+passagem nas medidas superiores a 10  10  5 cm serão de chapa de
+ferro nº 18 com tampa parafusada na mesma ou acrílico/ plástico de
+engenharia conforme
+especificado no projeto. As placas para a colocação das tomadas e
+interruptores deverão obedecer às seguintes
+medidas: Até 04 unidades: 10  5 cm (4” x 2”); De 05 a 08 unidades: 10
+ 10 cm (4” x 4”). Todos os pontos de luz foram alimentados com base na
+carga em watts dos pontos de
+utilização, calculados tendo em vista a obtenção de níveis de iluminação
+compatíveis com cada
+ambiente e obedecendo a NBR 5413. Todos os aparelhos elétricos e as
+tomadas deverão ser aterrados por meio de fio de cobre na
+cor verde, de bitola adequada ligados na barra de terra do quadro de
+luz, e daí ligados a terra
+através do sistema de aterramento geral de energia. Todos os shafts de
+abertura em laje deverão ser adequadamente fechados contra a passagem
+de fumaça de um pavimento para outro. Poderão ser executados com fibra
+cerâmica
+KAOWOOL (fabricação thermal ceramics) ou fechamento com poliuretano,
+desde que sejam
+materiais de fácil remoção. Todos os condutores instalados no
+empreendimento deverão ser com baixa emissão de
+compostos halógenos. 4.9.INSTALAÇÃO DE LUZ ESSENCIAL (GRUPO GERADOR)
+
+A instalação de energia essencial, visa garantir a alimentação elétrica
+para situação de falta de
+energia na rede elétrica comercial. O edifício é dotado de 02(dois)
+geradores a diesel (550kVA, cada), conforme indicação do projeto, os
+mesmos atenderão 100% da demanda das cargas do
+condomínio. Colocar as opções em caixas p/ marcar: - 100% edifício -
+100% condomínio - Parte condomínio / edifício (esse com espaço para
+identificar os circuitos por escrito) Os grupos moto-gerador serão
+independentes da rede elétrica, entrarão em funcionamento nos
+seguintes casos e condições: Falta de energia da Concessionária; Falta
+de energia por defeito das instalações; A comutação será automática em
+tempo entre 05 a 10 segundos. As unidades privativas não serão atendidas
+pelo grupo gerador. Foram previstas luminárias de
+emergência, alimentadas por baterias (bloco autônomo), para iluminação
+interna das salas,
+conforme projeto. 4.10.PROTEÇÃO CONTRA CHOQUES ELÉTRICOS E ATERRAMENTO
+Fixo, salvo partes em amarelo (projeto) Para proteção contra choques
+elétricos serão instalados nos Quadros de Distribuição,
+Dispositivos Diferenciais de Corrente Residual (DR), sendo 01(uma)
+unidade para cada circuito
+conforme indicados nos diagramas respectivos. Para assegurar as
+instalações contra choques elétricos deverá proceder da seguinte forma:
+Sistema:
+O sistema de aterramento utilizado será o TN-S, sendo a proteção contra
+choques elétricos
+efetuados por Disjuntores Diferenciais Residuais (DR) de 30 mA de
+sensibilidade. O aterramento do condutor de proteção bem como do neutro
+deverão ter barras terminais
+próprias nos quadros, sendo que a barra do condutor de proteção deverá
+ligar rigidamente ao
+Quadro e a do neutro, devidamente isolada. Os condutores terra dos
+Quadro Gerais de Distribuição de cada pavimento deverão ser
+conectados ao BEP e deste a malha de aterramento no subsolo da
+edificação. Este
+aterramento será feito através de hastes do tipo coopperweld de
+5/8”x2.400mm de
+comprimento, com cobertura mínima de 254u, sendo a distância mínima
+entre as hastes de
+3m. Estas hastes serão interligadas por cabo de cobre nu n.º #50 mm2,
+formando um reticulado de 3x3m. Com esta configuração, deveremos ter um
+baixo valor de resistência para
+a malha de aterramento, e asseguraremos um baixo valor das tensões de
+passo e contato. Um
+condutor de cobre nu 50mm2, conectará todas as hastes e deverá ser
+solidamente conectado
+as hastes através de conector GTDU ou solda exotérmica esse sistema
+deverá também ser
+
+conectado a gaiola de Faraday do sistema de SPDA da edificação ou seja
+todo o edifício deve
+estar no mesmo potencial. Este condutor deverá ser lançado em valas com
+profundidade
+mínima de 50cm. Considerando o solo argiloso, que apresenta boas
+condições de resistividade, o valor da
+resistência do sistema é estimado em 8 OHMS, não podendo ultrapassar a
+10 OHMS em
+qualquer época do ano. Após a conclusão da obra deverão ser realizadas
+medições de resistência da malha para
+confirmação dos valores previstos no projeto. Caso o valor da malha não
+atinja no período de
+seca valores abaixo de 10 OHMS, deverão ser acrescidas outras hastes ou
+realizado
+tratamento do solo, até que os valores de resistência estejam abaixo dos
+limites aceitáveis para
+o projeto que é de 10 OHMS. A resistência de terra, não deverá ser
+superior a 10 ohms. Todas as tomadas, luminárias,
+aparelhos e motores, como também os equipamentos de partida e controle,
+devem ser
+aterrados. Instalação: oCircuitos Terminais: Cada circuito terminal
+deverá ter individualmente o seu
+próprio neutro, derivando diretamente do Quadro de Luz. Em hipótese
+alguma
+o neutro e o condutor de proteção poderá ser comum, devendo ser
+totalmente
+independente. Emendas: oPara as emendas de fios e cabos em caixas de
+ligações, devem evitar o uso de
+fitas isolantes, dando preferência aos conectores isolados. Ligações
+Equipotenciais:
+oLigação principal: As tubulações metálicas hidráulicas, isto é de água
+fria, de
+água quente, de águas pluviais e de esgoto, etc, ou de qualquer outra
+natureza, tais como de ar condicionado, elementos metálicos acessíveis,
+com
+exceção da tubulação de gás, deverão ser interligadas e aterradas na
+Barra de
+Equipotencialização Principal (BEP). A seção de condutor de ligação
+equipotencial principal deverá ser no mínimo de 6 mm2 e simultaneamente
+maior que a metade da seção do condutor de proteção principal. oLigações
+Locais: As tubulações metálicas elétricas e hidráulicas, com exceção
+das tubulações de gás devem ser interligadas ao condutor de proteção
+mais
+próximo. Outras partes metálicas com área superior a 50 cm2, tais como
+banheira metálica, elementos metálicos de aparelhos sanitários, ralos e
+sifões
+de banheiros, portas e janelas metálicas, etc., deverão também ser
+ligadas a
+rede de equipotencialidade. Não será necessário interligar a ligação
+equipotencial, os aparelhos não elétricos, tais como, porta-toalhas,
+tela
+metálica de ventilação de banheiro, etc. Foi projetada uma Barra de
+Equipotencialização Principal, (BEP) localizada no subsolo, constituído
+de uma barra de cobre, no local indicado no desenho.
+
+Esse terminal deverá receber as ligações dos seguintes condutores de
+aterramento. Os condutores de ligações das massas metálicas; Os
+condutores de proteção; Os condutores de ligação equipotencial
+principal; Os condutores neutros. 4.11.MONTAGEM DOS APARELHOS O
+proponente deverá fornecer, montar e instalar os seguintes equipamentos
+e aparelhos: Interruptores, tomadas, etc; Bombas, suas chaves e
+ligações, proteção e comandos etc; Quadros de luz, força e quadros de
+equipamentos especiais; Iluminação de emergência e equipamentos
+componentes deste sistema; Motores elétricos; Luminárias
+incandescentes e fluorescents; Cabos, fios telefônicos; Iluminação
+externa; Cabine de medição e cabine de transformação; Caixas de
+medição. 4.12.ITENS NÃO INCLUSOS Os seguintes equipamentos e aparelhos
+serão de fornecimento da construtora, porém o
+proponente deverá orçar a mão-de-obra e materiais para a sua instalação,
+conforme projeto
+específico de automação: Colocar caixas de marcar para cada uma das
+opções abaixo CPCT. CFTV. Alarme para segurança patrimonial. Sistema
+de sonorização. Sistema de detecção e alarme de incêndio. Sistema de
+automação e supervisão. 5.ESPECIFICAÇÕES DOS MATERIAIS Fixo A
+substituição de qualquer material e/ ou equipamentos especificados, por
+outro
+equivalente, somente poderá ser feita deste que este material e/ ou
+equipamentos apresentem
+as mesmas características técnicas, mesmo desempenho operacional, mesma
+vida útil,
+mesmas condições de manutenção; que não altere substancialmente o
+projeto e tenha a
+concordância da fiscalização, que poderá exigir a qualquer momento
+ensaios e testes
+laboratoriais para comprovação do atendimento das normas da ABNT.
+5.1.INSTALAÇÕES ELÉTRICAS Fixo Eletrodutos, eletrocalhas e acessórios
+a)ELETRODUTOS DE AÇO GALVANIZADO, CURVAS E LUVAS
+
+oAplicação: Tubulações aparentes e áreas externas. oCaracterísticas: Em
+aço carbono galvanizado eletroliticamente, tipo pesado,
+classe L1, NBR-5624, rosca paralela BSP, em barras de 3,0 m.
+oFabricação: APOLLO, FORNASA, ELECON. b)ELETRODUTOS DE PVC, CURVAS E
+LUVAS oAplicação: Tubos em lajes, paredes, contrapisos, entreforros e
+enterrados. oCaracterísticas: EPVC rígido auto-extinguível a chamas,
+classe A, NBR 6150,
+rosca BSP, e, barras de 3,0 m. oFabricação: TIGRE, AMANCO. c)PERFILADO
+oAplicação: Teto do subsolo. oCaracterísticas: Em chapa de aço 14 MSG,
+de 38x38mm, tipo perfurado,
+galvanizado eletroliticamente acabamento sem rebarba interna e externa.
+oReferência: 102. oFabricação: MOPA, REALPENTIL, CEMAR. d)SUPORTES PARA
+PERFILADOS oAplicação: Perfilados. oCaracterísticas: Em chapa de aço
+laminado, galvanizados eletroliticamente,
+com furos de fixação. oReferência: 114-38-E. oFabricação: MOPA,
+REALPERFIL, CEMAR. e)CAIXAS ESTAMPADAS oAplicação: Lajes, paredes.
+oCaracterísticas: De embutir, tipo 4“x 2”, 4“x 4”, 4“x 4” FM, em PVC,
+com
+suportes em pvc e rosqueados. oFabricação: CEMAR, PIALLEGRAND, TIGRE,
+AMANCO. f)VERGALHÃO COM ROSCA TOTAL oAplicação: Perfilados e
+sustentações. oCaracterísticas: Em barra de aço redondo ø 3/8“e ø 5/16”,
+galvanizados
+eletroliticamente. oReferência: 114-40. oFabricação: MOPA, REALPERFIL,
+CEMAR. g)ELETROCALHAS oAplicação: Entreforro e prumadas.
+
+oCaracterísticas: Em chapa de aço laminado, galvanizado
+eletroliticamente, tipo
+liso com tampa, nas medidas do projeto, chapa 14 MSG. oReferência: 120.
+oFabricação: MOPA, REALPERFIL, CEMAR. h)ACESSÓRIOS DE FIXAÇÃO DE
+PERFILADOS E ELETROCALHA oAplicação: Eletrocalhas. oCaracterísticas:
+Tipo padronizado, galvanizado eletroliticamente. oFabricação: MOPA,
+REALPERFIL, CEMAR. i)CONDULETES oAplicação: Conexões em tubulações
+aparentes. oCaracterísticas: Em liga de alumínio fundido, com tampa
+aparafusada e junta
+de borracha. oFabricação: WETZEL, DAISA, BLINDA, TIGRE, AMANCO.
+j)ELETRODUTO FLEXÍVEL PARA LIGAÇÃO DE MOTORES oAplicação: Ligação de
+motores e equipamentos portáteis. oCaracterísticas: Eletroduto metálico
+flexível, com cobertura externa de
+Neoprene, com terminais de latão macho-fêmea. oReferência: SEALTUBO.
+oFabricação: SPTF. k)BUCHAS E ARRUELAS oAplicação: Terminações e
+acabamentos de tubos em caixas, quadros e
+equipamentos. oCaracterísticas: Em liga de alumínio fundido.
+oFabricação: P. THOMEU, WETZEL. l)INTERRUPTORES oCaracterísticas: Em
+material termoplástico na cor cinza e contatos em liga de
+prata. oReferência: A ser especificado pela arquitetura. oFabricação: B.
+TICINO, PIAL, SIEMENS. m)TOMADAS DE USO GERAL oCaracterísticas: Com
+placa em material termoplástico e contatos em liga de
+prata. oReferência: Ver memorial de arquitetura. oFabricação: PIAL
+LEGRAND, SIEMENS. n)TOMADAS DE FORÇA – ÁREA EXTERNA
+
+oCaracterísticas: Com tampa-mola em material termoplástico e contatos em
+liga
+de latão. oReferência: Linha Aquatic. oFabricação: PÍAL. o)ELETRODUTO
+CORRUGADO TIPO PEAD oAplicação: Em tubulações enterradas.
+oCaracterísticas: Eletroduto de polietileno de alta densidade, flexível,
+para duto
+subterrâneo. oReferência: Kanaflex. oFabricação: KANAFLEX, NOVOPLASTIC.
+5.2.FIOS E CABOS DE ENERGIA E COMANDO Fixo a)FIOS E CABOS DE BAIXA
+TENSÃO – 750V oAplicação: Circuitos terminais e cabos em tubulação.
+oCaracterísticas: Fios e cabos de cobre, têmpera mole, anti-chama, com
+isolação a base de PVC, classe 750 V, 70 ºC, BWF com baixa emissão de
+compostos halógenos. oFabricação: PRYSMIAN, ALCOA, FICAP, CONDUMAX,
+GENERAL CABLE,
+CORDEIRO, SIL. b)CABOS DE BAIXA TENSÃO - 0,6/1,0Kv oAplicação:
+Iluminação externa e cabos alimentadores das prumadas em leitos e
+eletrocalhas e alimentadores de quadros gerais e quadros de
+distribuição. oCaracterísticas: Cabos de cobre, têmpera mole,
+anti-chama, com isolação a
+base de XLPE/EPR, classe tensão 0,6/1,0 kV, 90 ºC baixa emissão de
+compostos halógenos. oFabricação: PRYSMIAN, ALCOA, FICAP, CONDUMAX,
+GENERAL CABLE. c)CABOS DE COBRE NU oAplicação: Sistemas de proteção
+contra descargas atmosféricas e aterramento. oCaracterísticas: Cabo de
+cobre nu, têmpera semidura, encordoamento classe
+2A. oFabricação: PRYSMIAN, ALCOA, FICAP, CONDUMAX, GENERAL CABLE.
+d)TERMINAIS E CONECTORES PARA CABOS oCaracterísticas: Em liga de cobre
+ou bronze, tipo à pressão ou compressão
+reforçado. oFabricação: BURNDY, MAGNET, ELTEC.
+
+5.3.LUMINÁRIAS E ACESSÓRIOS Fixo Devem ser empregadas lâmpadas e/ou
+luminárias em led, as quais devem ser projetadas e
+especificadas no projeto luminotécnico a ser contratado. Fabricação
+deverá ser OSRAM,
+PHILLIPS, LUSTRE E PROJETO, ITAIM, STELLA. 5.4.QUADROS GERAIS DE LUZ E
+FORÇA E ACESSÓRIOS Fixo a) QUADRO DE LUZ oCaracterísticas: Caixas em
+material isolante, chassis desmontável com calha
+DIN, e material da caixa, fornecida com pentes de ligação, fecho
+lingüeta,
+espelho de proteção contra contatos acidentais e porta etiquetas.
+Notação
+Munsel = N 6,5 - cor cinza. Grau de proteção: IP 55. oFabricação: HAGER/
+ELETROMAR, ABB, SIEMENS, CEMAR, BRUM, TIGRE b) DISJUNTORES DE QUADROS DE
+LUZ oCaracterísticas: Em caixa moldada para instalação em calha DIN, com
+proteção termomagnética para sobrecargas e curtos-circuitos, capacidade
+de
+ruptura mínima 3 kA/ 240 V, padrão IEC. oFabricação: SIEMENS, HAGER/
+ELETROMAR, ABB, SCHNEIDER, CEMAR. c) DISJUNTORES DE QUADROS DE
+DISTRIBUIÇÃO DE FORÇA oCaracterísticas: Em caixa moldada para corrente
+nominal até 800 A, e aberto
+para capacidade superior, com proteção termomagnética para sobrecargas e
+curtos-circuitos, capacidade de ruptura mínima de 6 kA/ 250 V,
+simétrica. oFabricação: SIEMENS, ABB, CUTLER-HAMMER, CEMAR, BRUM. d)
+BORNES PARA CABOS oCaracterísticas: Liga de cobre ou latão sobre trilho
+padrão DIN. oFabricação: ELTEC, BUXONY. Deverá seguir o indicado nos
+Quantitativos – Alimentadores e Proteções, onde há indicação
+completa das proteções, secções e quantidades associadas a cada Quadro
+do
+empreendimento. ___________________________________ Eng° Evandro César
+de Lima Ferreira
+CREA-16.03.55.76.10-D-PB .
