@@ -1,0 +1,7 @@
+O sistema de intercomunicação corporativo compreende infraestrutura para controle de acesso avançado e comunicação interna, utilizando tecnologia IP quando aplicável.
+
+O sistema será baseado em cabeamento estruturado CAT-6, permitindo a integração com sistemas de controle de acesso por RFID, biometria ou outras tecnologias modernas. Os pontos de interfone/intercomunicador serão conectados à rede de dados estruturada, possibilitando comunicação via protocolo IP.
+
+Botoeiras de abertura e fechaduras eletromagnéticas serão instaladas nos acessos conforme o projeto de segurança. O sistema permitirá integração com software de gerenciamento centralizado, possibilitando controle e monitoramento remoto dos acessos.
+
+A infraestrutura de cabeamento seguirá os mesmos padrões da rede de dados (EIA/TIA-568-C e NBR 14565), garantindo qualidade e possibilidade de expansão futura do sistema.

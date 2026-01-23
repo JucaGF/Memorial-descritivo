@@ -1,0 +1,9 @@
+O sistema de intercomunicação compreende a infraestrutura para comunicação entre as unidades residenciais e a portaria/guarita do empreendimento, além do controle de acesso aos halls de entrada.
+
+Serão instalados porteiros eletrônicos na(s) portaria(s) principal(is), com botoeiras de abertura posicionadas estrategicamente nos acessos de pedestres e veículos. As fechaduras magnéticas (eletroímãs) serão instaladas nos portões e portas de acesso aos halls, controladas pelas botoeiras e sistema de interfone.
+
+Os pontos de interfone nas unidades serão conectados à central de portaria através de cabos CCI-2, seguindo trajetos verticais pelos shafts de telecomunicações. A central de interfone será instalada na portaria ou sala de monitoramento, possibilitando a comunicação bidirecional entre porteiro e moradores.
+
+Cada unidade terá ao menos um ponto de interfone conforme indicado em projeto. Os DG's (Distribuidores Gerais) de interfone serãoposicionados em locais estratégicos de cada pavimento, centralizando as conexões.
+
+A alimentação elétrica das fechaduras, botoeiras e centrais de portaria será independente, com circuitos dedicados derivados dos quadros elétricos conforme projeto elétrico específico.

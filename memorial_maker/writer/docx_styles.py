@@ -253,12 +253,16 @@ def add_cover_page(doc: Document, logo_path: str, project_data: dict, memorial_t
 
 
 def add_table_of_contents(doc: Document):
-    """Adiciona sumário conforme modelo.
+    """Adiciona sumário com TOC field real do Word.
     
     Estrutura:
     - Título "SUMÁRIO" centralizado
-    - Lista de seções com pontos de preenchimento e números de página
+    - TOC field com líderes pontilhados e numeração de página
+    - Requer "Atualizar Campos" no Word/LibreOffice para ver paginação
     """
+    from docx.oxml import OxmlElement
+    from docx.oxml.ns import qn
+    
     # Título SUMÁRIO (centralizado)
     sumario_title = doc.add_paragraph()
     sumario_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -269,38 +273,74 @@ def add_table_of_contents(doc: Document):
     
     doc.add_paragraph()  # Espaço
     
-    # Itens do sumário (manualmente, já que python-docx não suporta TOC automático)
-    toc_items = [
-        ("1. INTRODUÇÃO", False),
-        ("2. DADOS DA OBRA", False),
-        ("3. NORMAS TÉCNICAS", False),
-        ("4. SERVIÇOS CONTEMPLADOS", False),
-        ("4.1. SERVIÇO DE VOZ", True),
-        ("4.2. SERVIÇO DE DADOS", True),
-        ("4.3. SERVIÇO DE VÍDEO", True),
-        ("4.4. SERVIÇO DE INTERCOMUNICAÇÃO", True),
-        ("4.5. SERVIÇO DE MONITORAMENTO", True),
-        ("5. SALA DE MONITORAMENTO (ER / EF)", False),
-        ("6. ELEMENTOS PASSIVOS E ATIVOS DA REDE", False),
-        ("7. TESTES E ACEITAÇÃO", False),
-    ]
+    # Adiciona TOC field real do Word
+    # Estrutura: <w:fldSimple w:instr="TOC \o &quot;1-2&quot; \h \z \u">
+    # ou complex field com BEGIN/INSTR/END
     
-    for item_text, is_subsection in toc_items:
-        para = doc.add_paragraph()
-        
-        # Indentação para subseções (4.1, 4.2, etc.)
-        if is_subsection:
-            para.paragraph_format.left_indent = Cm(1.5)
-        else:
-            para.paragraph_format.left_indent = Cm(0)
-        
-        # Texto do item (sem pontos de preenchimento)
-        run = para.add_run(item_text)
-        run.font.name = 'Arial'
-        run.font.size = Pt(11)
+    para = doc.add_paragraph()
+    para.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    
+    # Criamos um complex field structure
+    # <w:p>
+    #   <w:fldChar w:fldCharType="begin"/>
+    #   <w:instrText> TOC \o "1-2" \h \z \u </w:instrText>
+    #   <w:fldChar w:fldCharType="separate"/>
+    #   <w:fldChar w:fldCharType="end"/>
+    # </w:p>
+    
+    run = para.add_run()
+    fldChar_begin = OxmlElement('w:fldChar')
+    fldChar_begin.set(qn('w:fldCharType'), 'begin')
+    run._r.append(fldChar_begin)
+    
+    run = para.add_run()
+    instrText = OxmlElement('w:instrText')
+    instrText.set(qn('xml:space'), 'preserve')
+    # TOC switches:
+    # \o "1-2" = outline levels 1-2 (Heading 1 and Heading 2)
+    # \h = hyperlinks
+    # \z = hide page numbers in web view
+    # \u = use hyperlinks instead of page numbers
+    # \t = use styles (podemos não usar já que \o captura headings)
+    instrText.text = 'TOC \\o "1-2" \\h \\z \\t "Heading 1,1,Heading 2,2"'
+    run._r.append(instrText)
+    
+    run = para.add_run()
+    fldChar_separate = OxmlElement('w:fldChar')
+    fldChar_separate.set(qn('w:fldCharType'), 'separate')
+    run._r.append(fldChar_separate)
+    
+    # Placeholder text (aparece antes de atualizar campos)
+    run = para.add_run()
+    run.text = "Clique com botão direito e selecione 'Atualizar Campo' para gerar o sumário."
+    run.font.name = 'Arial'
+    run.font.size = Pt(11)
+    run.font.italic = True
+    run.font.color.rgb = RGBColor(128, 128, 128)
+    
+    run = para.add_run()
+    fldChar_end = OxmlElement('w:fldChar')
+    fldChar_end.set(qn('w:fldCharType'), 'end')
+    run._r.append(fldChar_end)
+    
+    # Configurar tab stops com líderes pontilhados para o parágrafo do TOC
+    # Isso afeta como as entradas do TOC serão formatadas após atualização
+    pPr = para._element.get_or_add_pPr()
+    tabs = OxmlElement('w:tabs')
+    
+    # Tab stop alinhado à direita na margem direita (~16cm do início)
+    # com líderes pontilhados (leader="dot")
+    tab = OxmlElement('w:tab')
+    tab.set(qn('w:val'), 'right')
+    tab.set(qn('w:leader'), 'dot')  # Líderes pontilhados
+    tab.set(qn('w:pos'), '9026')  # ~16cm em twips (16 * 567 ≈ 9072)
+    tabs.append(tab)
+    
+    pPr.append(tabs)
     
     # Quebra de página após sumário
     doc.add_page_break()
+
 
 
 def add_section_heading(doc: Document, number: str, title: str, level: int = 1):
@@ -359,6 +399,63 @@ def format_decimal(value: float) -> str:
         String formatada
     """
     return f"{value:.2f}".replace(".", ",")
+
+
+def add_signature_block(doc: Document, master_data: dict):
+    """Adiciona bloco de assinatura no final do memorial.
+    
+    Estrutura conforme modelo de referência:
+    - Linha de assinatura
+    - Nome do responsável técnico
+    - CREA
+    
+    Args:
+        doc: Documento python-docx
+        master_data: Dados consolidados (para extrair responsável e CREA)
+    """
+    # Espaçamento antes da assinatura
+    for _ in range(3):
+        doc.add_paragraph()
+    
+    # Linha de assinatura
+    signature_line = doc.add_paragraph()
+    signature_line.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = signature_line.add_run("_" * 50)
+    run.font.name = 'Arial'
+    run.font.size = Pt(11)
+    
+    # Nome do responsável técnico
+    # Procurar em obra.responsavel_tecnico ou carimbo.responsavel ou usar placeholder
+    obra = master_data.get("obra", {})
+    carimbo = obra.get("carimbo", {})
+    
+    responsavel = (
+        obra.get("responsavel_tecnico") or 
+        carimbo.get("responsavel") or 
+        carimbo.get("engenheiro") or
+        "RESPONSÁVEL TÉCNICO"
+    )
+    
+    name_para = doc.add_paragraph()
+    name_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = name_para.add_run(responsavel.upper())
+    run.font.name = 'Arial'
+    run.font.size = Pt(11)
+    run.font.bold = True
+    
+    # CREA
+    crea = (
+        obra.get("crea") or 
+        carimbo.get("crea") or
+        "CREA XXXXX"
+    )
+    
+    crea_para = doc.add_paragraph()
+    crea_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    run = crea_para.add_run(crea.upper() if not crea.upper().startswith("CREA") else crea.upper())
+    run.font.name = 'Arial'
+    run.font.size = Pt(11)
+
 
 
 

@@ -94,6 +94,94 @@ class SectionGenerator:
         logger.debug(f"Carregando prompt: {path}")
         with open(path, "r", encoding="utf-8") as f:
             return f.read()
+    
+    def _get_building_type(self, master_data: Dict[str, Any]) -> str:
+        """Detect building type from master_data.
+        
+        Returns:
+            "residencial" or "corporativo" (corporativo includes comercial)
+        """
+        obra = master_data.get("obra", {})
+        
+        # Check tipo_edificacao field
+        tipo_edificacao = obra.get("tipo_edificacao", "").lower()
+        if tipo_edificacao:
+            if "resid" in tipo_edificacao or "apart" in tipo_edificacao:
+                return "residencial"
+            if "comercial" in tipo_edificacao or "corporativ" in tipo_edificacao or "escritor" in tipo_edificacao:
+                return "corporativo"
+        
+        # Check tipologia field
+        tipologia = obra.get("tipologia", "").lower()
+        if tipologia:
+            if "resid" in tipologia or "apart" in tipologia:
+                return "residencial"
+            if "comercial" in tipologia or "corporativ" in tipologia or "escritor" in tipologia or "loja" in tipologia:
+                return "corporativo"
+        
+        # Check empreendimento name for hints
+        empreendimento = obra.get("empreendimento", "").lower()
+        if any(kw in empreendimento for kw in ["residencial", "apart", "condominio", "condomínio", "edifício"]):
+            return "residencial"
+        if any(kw in empreendimento for kw in ["comercial", "corporativ", "escritorio", "escritório", "loja", "shopping"]):
+            return "corporativo"
+        
+        # Default to residencial (more common in the context)
+        logger.warning("Building type not detected, defaulting to 'residencial'")
+        return "residencial"
+    
+    def _load_static_template(self, section_id: str, building_type: str) -> Optional[str]:
+        """Load static template file for a section based on building type.
+        
+        Args:
+            section_id: Section identifier (e.g., "s4_1_voz")
+            building_type: "residencial" or "corporativo"
+            
+        Returns:
+            Template content or None if not found
+        """
+        # Map section_id to template filename
+        template_map = {
+            "s4_1_voz": f"s4_1_voz_{building_type}.txt",
+            "s4_4_intercom": f"s4_4_intercom_{building_type}.txt",
+        }
+        
+        template_filename = template_map.get(section_id)
+        if not template_filename:
+            return None
+        
+        template_path = self.prompts_dir / "telecom" / "templates" / template_filename
+        
+        if not template_path.exists():
+            logger.warning(f"Template não encontrado: {template_path}")
+            return None
+        
+        logger.info(f"Carregando template estático: {template_filename}")
+        with open(template_path, "r", encoding="utf-8") as f:
+            return f.read()
+    
+    def _load_s5_observation(self, building_type: str) -> str:
+        """Load observation for section 5 (Sala de Monitoramento) if residential.
+        
+        Args:
+            building_type: "residencial" or "corporativo"
+            
+        Returns:
+            Observation text or empty string
+        """
+        if building_type != "residencial":
+            return ""
+        
+        obs_path = self.prompts_dir / "telecom" / "templates" / "s5_observacao_residencial.txt"
+        
+        if not obs_path.exists():
+            logger.warning(f"Observação residencial não encontrada: {obs_path}")
+            return ""
+        
+        logger.info("Adicionando observação residencial para sala de monitoramento")
+        with open(obs_path, "r", encoding="utf-8") as f:
+            return f.read()
+
 
     def _filter_context_for_section(
         self,
@@ -530,6 +618,23 @@ Retorne APENAS o JSON estruturado identificando os sistemas presentes. Não incl
         logger.debug(f"Memorial type: {self.memorial_type}")
         
         try:
+            # For telecom memorials, check for static templates for specific sections
+            if self.memorial_type == "telecom":
+                building_type = self._get_building_type(master_data)
+                logger.info(f"Building type detected: {building_type}")
+                
+                # Check if this section should use static template
+                if section_id in ("s4_1_voz", "s4_4_intercom"):
+                    static_content = self._load_static_template(section_id, building_type)
+                    if static_content:
+                        logger.info(f"Usando template estático para {section_id} ({building_type})")
+                        return {"section_id": section_id, "content": static_content}
+                
+                # For section 5, generate with AI but append observation if residential
+                if section_id == "s5_sala_monitoramento":
+                    # Generate normal content first (LLM will do this below)
+                    pass  # Fall through to normal LLM generation
+            
             # For electrical memorials, check if there's a static template first
             if self.memorial_type == "eletrico" and self.static_loader:
                 # Check if section has a static template
@@ -578,9 +683,17 @@ Gere agora o texto da seção em PT-BR técnico, seguindo as regras.
             
             human_msg = HumanMessage(content=human_prompt)
             
+            
             # Chama LLM
             response = await self.llm.ainvoke([system_msg, human_msg])
             content = response.content.strip()
+            
+            # For telecom section 5, append residential observation if applicable
+            if self.memorial_type == "telecom" and section_id == "s5_sala_monitoramento":
+                building_type = self._get_building_type(master_data)
+                observation = self._load_s5_observation(building_type)
+                if observation:
+                    content = content + "\n\n" + observation
             
             logger.info(f"Seção {section_id} gerada: {len(content)} chars")
             logger.debug(f"Preview: {content[:100]}...")

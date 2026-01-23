@@ -1,0 +1,7 @@
+OBSERVAÇÃO: Em empreendimentos residenciais típicos, normalmente não há uma sala de monitoramento dedicada exclusivamente para telecomunicações. Os racks e equipamentos de telecomunicações são geralmente instalados em locais apropriados como:
+
+- Hall de entrada do edifício (em armários fechados e ventilados)
+- Sala da zeladoria ou administração
+- Áreas técnicas compartilhadas com instalações elétricas (quadros gerais)
+
+Independentemente da localização escolhida, o espaço destinado aos equipamentos de telecomunicações deverá atender aos requisitos mínimos de ventilação, aterramento adequado (TGB/TMGB), alimentação elétrica independente, e controle de acesso restrito para segurança dos equipamentos.

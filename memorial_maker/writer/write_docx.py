@@ -12,6 +12,7 @@ from memorial_maker.writer.docx_styles import (
     add_header_footer,
     add_section_heading,
     add_body_text,
+    add_signature_block,
 )
 from memorial_maker.utils.logging import get_logger
 
@@ -82,6 +83,7 @@ class MemorialWriter:
             from memorial_maker.writer.docx_styles import add_table_of_contents
             add_table_of_contents(self.doc)
         
+        
         # Seções baseadas no tipo
         if memorial_type == "eletrico":
             self._write_electrical_sections(sections)
@@ -94,6 +96,9 @@ class MemorialWriter:
             self._write_section_5(sections.get("s5_sala_monitoramento", ""))
             self._write_section_6(sections.get("s6_passivos_ativos", ""))
             self._write_section_7(sections.get("s7_testes_aceitacao", ""))
+            
+            # Adiciona bloco de assinatura no final do memorial telecom
+            add_signature_block(self.doc, master_data)
         
         # Salva
         output_path.parent.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,7 @@
+O sistema de voz contempla a infraestrutura necessária para comunicação telefônica nas unidades residenciais. Serão instalados pontos de telefone distribuídos conforme projeto, utilizando cabos CCI-2 (cabo de telecomunicações interno) ou similar.
+
+Os cabos CCI-2 partirão dos DG's (Distribuidor Geral) localizados em cada pavimento, interligando os pontos de telefone das unidades até a sala de telecomunicações. Os DG's serão alimentados por cabos CCI multipares provenientes da sala técnica principal.
+
+A infraestrutura de dutos, caixas de passagem e eletrodutos seguirá as normas NBR 14565 e EIA/TIA-569, garantindo espaço adequado para passagem dos cabos e facilitando futuras intervenções de manutenção.
+
+Os pontos de telefone serão identificados conforme planta, com tomadas RJ-11 padrão, possibilitando a conexão de aparelhos telefônicos convencionais ou sistemas de telefonia IP quando disponibilizados pela operadora.

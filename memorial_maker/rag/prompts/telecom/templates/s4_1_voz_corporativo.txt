@@ -1,0 +1,7 @@
+O sistema de voz contempla a infraestrutura de telefonia corporativa, com cabeamento estruturado categoria 6 (CAT-6) para suporte a sistemas de VoIP (Voz sobre IP) e telefonia convencional.
+
+Os pontos de voz serão distribuídos conforme projeto executivo, utilizando cabos UTP CAT-6  conectados a voice panels em cada pavimento. Os voice panels concentrarão asconexões de voz e serão interligados aos patch panels principais na sala de telecomunicações através de  backbone vertical em fibra óptica ou cabo metálico de alta capacidade.
+
+A infraestrutura permitirá a implementação de PABX IP, com integração completa entre os sistemas de voz e dados, possibilitando funcionalidades avançadas como ramal móvel, conferência, correio de voz, e discagem por extensão.
+
+O cabeamento seguirá rigorosamente as normas EIA/TIA-568-C, ISO/IEC 11801 e NBR 14565, garantindo desempenho de até 1 Gbps e atendendo aos padrões internacionais de qualidade para comunicações unificadas.
