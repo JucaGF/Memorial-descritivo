@@ -73,15 +73,17 @@ class MemorialWriter:
         from memorial_maker.writer.docx_styles import add_cover_page
         add_cover_page(self.doc, None, project_data, memorial_type)
         
-        # Sumário - conditional based on memorial type
-        if memorial_type == "eletrico":
-            # For electrical memorials, the TOC is generated as s1_sumario section
-            # and will be written by _write_electrical_sections()
-            pass
+        
+        # Sumário
+        if memorial_type == "telecom":
+            # Sumário fixo para telecom (seções sempre iguais)
+            from memorial_maker.writer.fixed_toc import add_fixed_toc_telecom
+            add_fixed_toc_telecom(self.doc)
         else:
-            # For telecom memorials, use the hardcoded TOC
+            # TOC field dinâmico para elétrico
             from memorial_maker.writer.docx_styles import add_table_of_contents
             add_table_of_contents(self.doc)
+
         
         
         # Seções baseadas no tipo
@@ -90,7 +92,7 @@ class MemorialWriter:
         else:
             # Telecom memorial (existing behavior)
             self._write_section_1(sections.get("s1_introducao", ""))
-            self._write_section_2(sections.get("s2_dados_obra", ""))
+            self._write_section_2_structured(master_data)  # Use structured schema
             self._write_section_3(sections.get("s3_normas", ""))
             self._write_section_4(sections)
             self._write_section_5(sections.get("s5_sala_monitoramento", ""))
@@ -100,10 +102,19 @@ class MemorialWriter:
             # Adiciona bloco de assinatura no final do memorial telecom
             add_signature_block(self.doc, master_data)
         
+        
+        
         # Salva
         output_path.parent.mkdir(parents=True, exist_ok=True)
         self.doc.save(str(output_path))
+        
+        # Post-process: Clean TOC field result (only for electrical memorials)
+        if memorial_type == "eletrico":
+            from memorial_maker.writer.docx_postprocess import clean_toc_field_result
+            clean_toc_field_result(output_path)
+        
         logger.info(f"Memorial salvo: {output_path}")
+
 
     def _write_section_1(self, content: str):
         """Seção 1: Introdução."""
@@ -150,6 +161,28 @@ class MemorialWriter:
             if content:
                 add_section_heading(self.doc, number, title, level=2)
                 add_body_text(self.doc, content)
+    
+    def _write_section_2_structured(self, master_data: Dict):
+        """Seção 2: Dados da Obra (structured schema-based).
+        
+        Uses explicit field schema to ensure all required fields appear
+        with proper formatting and "Não informado" for missing values.
+        """
+        from memorial_maker.writer.dados_obra_schema import format_dados_obra_section
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
+        
+        add_section_heading(self.doc, "2", "DADOS DA OBRA", level=1)
+        
+        # Generate structured content
+        content = format_dados_obra_section(master_data)
+        
+        # Write each line as a paragraph
+        for line in content.split("\n\n"):
+            line = line.strip()
+            if not line:
+                continue
+            para = self.doc.add_paragraph(line, style='Normal')
+            para.alignment = WD_ALIGN_PARAGRAPH.LEFT
 
     def _write_section_5(self, content: str):
         """Seção 5: Sala de Monitoramento."""
@@ -174,21 +207,9 @@ class MemorialWriter:
         Args:
             sections: Dicionário {section_id: content} - apenas seções com conteúdo
         """
-        # Sumário (Static TOC)
-        if "s0_sumario" in sections:
-            content = sections["s0_sumario"]
-            if content and len(content.strip()) > 50:
-                add_section_heading(self.doc, "", "SUMÁRIO", level=1)
-                # Add sumário with LEFT alignment to avoid excessive word spacing
-                from docx.enum.text import WD_ALIGN_PARAGRAPH
-                paragraphs = content.split("\n\n")
-                for para_text in paragraphs:
-                    para_text = para_text.strip()
-                    if not para_text:
-                        continue
-                    para = self.doc.add_paragraph(para_text, style='Normal')
-                    # Override alignment to LEFT for better readability in TOC
-                    para.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        # Sumário: não processar s0_sumario - TOC field é adicionado automaticamente
+        # antes das seções (ver linha ~78).
+        # Isso evita duplicação de sumário.
         
         # Section 1: INTRODUÇÃO
         if "s1_introducao" in sections:
